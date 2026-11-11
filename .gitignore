@@ -14,12 +14,12 @@ pnpm-debug.log*
 
 # environment variables
 .env
+.env.local
 .env.development
 .env.production
-.dev.vars
 
-# Cloudflare
-.wrangler/
+# Vercel
+.vercel/
 
 # macOS-specific files
 .DS_Store

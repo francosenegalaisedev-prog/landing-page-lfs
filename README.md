@@ -7,19 +7,18 @@ Ce code reproduit la maquette validée (« Landing page V3 · synthèse ») : ou
 - **Astro 7** : pages statiques, TypeScript, sans framework JavaScript côté navigateur.
 - **Tailwind CSS 4**, branché par le plugin Vite officiel (`@tailwindcss/vite`).
 - Quelques scripts TypeScript légers pour les interactions (`src/scripts/`).
-- Hébergement prévu : **Cloudflare Pages** ; formulaires : **Pages Functions** (`functions/`), **Brevo** pour les e-mails, **Cloudflare Turnstile** contre le spam.
-- **Node.js 22.23.4 ou plus récent** (exigence d'Astro 7).
+- Hébergement prévu : **Vercel** ; formulaires : **Vercel Functions** (`api/`), **Brevo** pour les e-mails, **Cloudflare Turnstile** (facultatif) contre le spam.
+- **Node.js 22.23.4 ou plus récent** (22.x sur Vercel ; exigence d'Astro 7).
 
 ## Démarrer
 
 ```sh
 npm install
-npm run dev              # http://localhost:4321
-npm run build            # site statique dans dist/
-npm run preview          # sert dist/ en local
-npm run check            # vérification TypeScript des composants
-npm run dev:fonctions    # build puis wrangler pages dev dist : site + fonctions /api/* (variables dans .dev.vars)
-npm run test:fonctions   # build puis test automatique des fonctions avec une API Brevo simulée
+npm run dev       # http://localhost:4321 (exécute aussi /api/* si .env.local est rempli)
+npm run build     # site statique dans dist/
+npm run preview   # sert dist/ en local
+npm run check     # vérification TypeScript des composants
+npm test          # tests unitaires des fonctions /api/contact et /api/newsletter (sans clé)
 ```
 
 ## Où modifier quoi
@@ -39,9 +38,9 @@ npm run test:fonctions   # build puis test automatique des fonctions avec une AP
 | `src/styles/global.css` | Charte en `@theme` Tailwind (couleurs, polices), utilitaires du site, soleil et animation phygital |
 | `src/assets/` | Logos (PNG et WebP) |
 | `public/` | Favicon, icône d'écran d'accueil, image de partage `og-image.jpg` |
-| `functions/api/contact.ts`, `functions/api/newsletter.ts`, `functions/_brevo.ts` | Fonctions d'envoi (Brevo) et journaux d'erreur |
-| `.dev.vars.example` | Modèle des variables des fonctions, pour les tester en local |
-| `scripts/tester-fonctions.mjs` | Test automatique des fonctions avec une API Brevo simulée |
+| `api/contact.ts`, `api/newsletter.ts`, `lib/brevo.ts` | Fonctions Vercel d'envoi (Brevo) et journaux d'erreur |
+| `.env.local.example` | Modèle des variables des fonctions, pour les tester en local |
+| `tests/fonctions.test.mjs` | Tests unitaires des fonctions avec une API Brevo simulée |
 
 Composants (`src/components/`) : `EnTete`, `Ouverture`, `BandeauMarques`, `Phygital`, `Conviction`, `Groupe`, `Projets`, `CarteProjet`, `PastillesPoles`, `Poles`, `Carrieres`, `Contact`, `PiedDePage`, `Icone`, `PageSimple`.
 Pages (`src/pages/`) : `index.astro`, `mentions-legales.astro`, `confidentialite.astro`, `robots.txt.ts`, `sitemap.xml.ts`.
@@ -64,51 +63,56 @@ Pages (`src/pages/`) : `index.astro`, `mentions-legales.astro`, `confidentialite
 
 ## Mise en ligne des formulaires
 
-Le formulaire de contact envoie un e-mail à `lafrancosenegalaise@gmail.com` (ou à `CONTACT_TO`) et la newsletter inscrit le visiteur en double opt-in, tous deux via **Brevo**, depuis des fonctions **Cloudflare Pages**. Rien ne fonctionne en ligne tant que les deux comptes ne sont pas configurés comme ci-dessous. Les intitulés des menus peuvent légèrement varier selon l'évolution des tableaux de bord.
+Le formulaire de contact envoie un e-mail à `lafrancosenegalaise@gmail.com` (ou à `CONTACT_TO`) et la newsletter inscrit le visiteur en double opt-in, tous deux via **Brevo**, depuis des fonctions **Vercel** (`api/contact.ts` et `api/newsletter.ts`). Rien ne fonctionne en ligne tant que les deux comptes ne sont pas configurés comme ci-dessous.
 
 ### 1. Dans Brevo
 
 1. **Créer le compte** sur brevo.com (le plan gratuit suffit pour démarrer ; il limite le nombre d'e-mails par jour).
-2. **Clé API** → `BREVO_API_KEY`. Menu du compte (en haut à droite) → *SMTP et API* → onglet *Clés API* → *Générer une nouvelle clé API*. Donnez-lui un nom (par exemple « site-lfs ») et copiez-la tout de suite : elle ne s'affiche qu'une fois. Ne la mettez jamais dans le code ni dans Git.
+2. **Clé API** → `BREVO_API_KEY`. Menu du compte (en haut à droite) → *SMTP et API* → onglet *Clés API* → *Générer une nouvelle clé API*. Donnez-lui un nom (par exemple « site-lfs ») et copiez-la tout de suite (elle commence par `xkeysib-`). Ne la mettez jamais dans le code ni dans Git.
 3. **Domaine et expéditeur** → `SENDER_EMAIL` (et `SENDER_NAME`). *Expéditeurs, domaines et IP dédiées* :
-   - *Domaines* → *Ajouter un domaine* (le nom de domaine du site), puis ajouter chez le gestionnaire du domaine les enregistrements DNS que Brevo affiche (code de vérification, **DKIM**, **DMARC**) et cliquer sur *Authentifier*. Si le domaine est géré par Cloudflare, ces enregistrements s'ajoutent dans Cloudflare > DNS.
-   - *Expéditeurs* → *Ajouter un expéditeur* : une adresse sur ce domaine (par exemple `contact@votre-domaine`), validée par un e-mail de Brevo. C'est la valeur de `SENDER_EMAIL`. Une adresse Gmail comme expéditeur est déconseillée : les e-mails risquent d'être refusés ou classés en spam.
+   - *Domaines* → *Ajouter un domaine* (`lafrancosenegalaise.com`), puis ajouter chez le gestionnaire DNS du domaine les enregistrements que Brevo affiche (code de vérification, **DKIM**, **DMARC**) et cliquer sur *Authentifier*.
+   - *Expéditeurs* → *Ajouter un expéditeur* : une adresse sur ce domaine (par exemple `contact@lafrancosenegalaise.com`), validée par un e-mail de Brevo. C'est la valeur de `SENDER_EMAIL`. Une adresse Gmail comme expéditeur est déconseillée en production : les e-mails risquent d'être classés en spam.
 4. **Liste « Newsletter »** → `BREVO_LIST_ID`. *Contacts* → *Listes* → *Créer une liste* nommée « Newsletter ». Notez son **numéro (ID)**, affiché dans le tableau des listes.
 5. **Modèle de double opt-in** → `BREVO_DOI_TEMPLATE_ID`. *Marketing* → *Modèles d'e-mail* → créer un modèle avec un court texte de confirmation et un bouton (ou un lien) dont l'adresse est **exactement `{{ params.DOIurl }}`**. Sans ce lien, Brevo refuse le modèle. Évitez les variables du contact (prénom…) : il n'est pas encore inscrit. Choisissez l'expéditeur de l'étape 3, **activez** le modèle et notez son **numéro (ID)**.
 
 Le visiteur clique sur le lien de confirmation, Brevo l'ajoute alors à la liste et le renvoie vers `SITE_URL/?newsletter=confirmee`.
 
-### 2. Dans Cloudflare Pages
+### 2. Dans Vercel
 
-1. **Créer le compte** sur cloudflare.com, puis *Workers & Pages* → *Create* → onglet *Pages* → *Connect to Git* (dépôt du site).
-2. **Réglages de build** : préréglage *Astro*, commande de build `npm run build`, dossier de sortie `dist`. Si le build échoue à cause de la version de Node, ajoutez la variable de build `NODE_VERSION` avec une version 22.23.4 ou plus récente.
-3. **Dossier `functions/`** : il est à la racine du projet, Cloudflare le déploie tout seul avec le site (`/api/contact` et `/api/newsletter`). Après un déploiement, on le vérifie dans le projet > *Functions*. Avec un envoi manuel : `npx wrangler pages deploy dist` depuis la racine du projet.
-4. **Variables d'exécution** (projet > *Settings* > *Variables and Secrets*, environnement *Production*). Les secrets se saisissent avec le type *Secret*.
+1. **Importer le dépôt GitHub** : sur vercel.com, *Add New…* → *Project* → sélectionner le dépôt GitHub du site.
+2. **Réglages de build** :
+   - *Framework Preset* : **Astro** (détecté automatiquement).
+   - *Build Command* : `npm run build`
+   - *Output Directory* : `dist`
+   - *Node.js Version* (dans *Settings* > *Build and Deployment* > *Node.js Version*) : **22.x**.
+3. **Dossier `api/`** : placé à la racine du projet (`api/contact.ts` et `api/newsletter.ts`), Vercel le déploie automatiquement sous `/api/contact` et `/api/newsletter`.
+4. **Variables d'environnement** (projet > *Settings* > *Environment Variables*, environnements *Production* et *Preview*) :
 
-   | Variable | Type | Obligatoire | Valeur |
+   | Variable | Sensible | Obligatoire | Valeur |
    | --- | --- | --- | --- |
-   | `BREVO_API_KEY` | Secret | oui | Clé API Brevo (étape 1.2) |
-   | `SENDER_EMAIL` | Texte | oui | Expéditeur authentifié (étape 1.3) |
-   | `SENDER_NAME` | Texte | non | Nom affiché de l'expéditeur (défaut : « Site La Franco-Sénégalaise ») |
-   | `CONTACT_TO` | Texte | non | Destinataire des demandes (défaut : `lafrancosenegalaise@gmail.com`) |
-   | `BREVO_LIST_ID` | Texte | pour la newsletter | Numéro de la liste (étape 1.4) |
-   | `BREVO_DOI_TEMPLATE_ID` | Texte | pour la newsletter | Numéro du modèle (étape 1.5) |
-   | `SITE_URL` | Texte | pour la newsletter | Adresse du site avec `https://`, par exemple `https://votre-domaine.com` |
-   | `TURNSTILE_SECRET_KEY` | Secret | non | Clé secrète Turnstile (étape 5) |
+   | `BREVO_API_KEY` | oui | oui | Clé API v3 Brevo (`xkeysib-…`, étape 1.2) |
+   | `SENDER_EMAIL` | non | oui | Expéditeur authentifié (étape 1.3) |
+   | `SENDER_NAME` | non | non | Nom affiché de l'expéditeur (défaut : « Site La Franco-Sénégalaise ») |
+   | `CONTACT_TO` | non | non | Destinataire des demandes (défaut : `lafrancosenegalaise@gmail.com`) |
+   | `BREVO_LIST_ID` | non | pour la newsletter | Numéro de la liste (étape 1.4) |
+   | `BREVO_DOI_TEMPLATE_ID` | non | pour la newsletter | Numéro du modèle (étape 1.5) |
+   | `SITE_URL` | non | pour la newsletter | Adresse du site avec `https://`, par exemple `https://lafrancosenegalaise.com` |
+   | `TURNSTILE_SECRET_KEY` | oui | non | Clé secrète anti-spam Turnstile (étape 5) |
+   | `PUBLIC_TURNSTILE_SITE_KEY` | non | non | Clé de site Turnstile lue au build (étape 5) |
 
-5. **Anti-spam Turnstile (facultatif)** : Cloudflare > *Turnstile* > *Add widget*, en indiquant le domaine du site. Cloudflare donne deux clés : la **clé secrète** va dans `TURNSTILE_SECRET_KEY` (exécution) et la **clé de site** dans la variable de **build** `PUBLIC_TURNSTILE_SITE_KEY` (projet > *Settings* > *Build* > *Variables and secrets*). Renseignez les deux ensemble : avec la clé secrète seule, tous les envois sont refusés.
-6. **Domaine** : projet > *Custom domains* > ajouter le domaine. Mettez ensuite le même domaine dans `site` de `astro.config.mjs` et dans `SITE_URL`.
-7. **Redéployer** après tout changement de variable (elles ne s'appliquent qu'au déploiement suivant).
-8. **Activer la newsletter** : quand le domaine est authentifié chez Brevo et que les variables sont en place, passer `fonctionnalites.newsletter` à `true` dans `src/config.ts`, puis redéployer.
+5. **Anti-spam Cloudflare Turnstile (facultatif)** : Turnstile fonctionne sur n'importe quel hébergeur, y compris Vercel. Si vous souhaitez l'activer, créez un widget Turnstile pour le domaine `lafrancosenegalaise.com` : placez la **clé secrète** dans `TURNSTILE_SECRET_KEY` et la **clé de site** dans `PUBLIC_TURNSTILE_SITE_KEY` dans Vercel. Renseignez toujours les deux ensemble : avec la clé secrète seule, tous les envois sont refusés.
+6. **Domaine** : projet > *Settings* > *Domains* > ajouter `lafrancosenegalaise.com`.
+7. **Redéployer** (*Deployments* > *Redeploy*) après tout ajout ou modification de variable d'environnement, puis **tester un envoi** depuis le formulaire de contact en ligne et vérifier la réception dans la boîte `CONTACT_TO`.
+8. **Activer la newsletter** : quand le domaine est authentifié chez Brevo et que les variables sont en place, passer `fonctionnalites.newsletter` à `true` dans `src/config.ts`, puis pousser sur GitHub.
 
 ### 3. Lire les journaux en cas d'échec
 
-Projet Pages > *Functions* > *Real-time logs* (*Begin log stream*), puis envoyer le formulaire. Les messages commencent par `[contact]` ou `[newsletter]` et ne contiennent ni la clé API ni les données du visiteur.
+Dans Vercel > projet > onglet *Logs* (filtrer sur `/api/contact` ou `/api/newsletter`), envoyer le formulaire. Les messages commencent par `[contact]` ou `[newsletter]` et ne contiennent ni la clé API ni les données du visiteur.
 
 | Message | Cause probable |
 | --- | --- |
 | `variable(s) absente(s)` ou `absente(s) ou invalide(s)` | Une variable du tableau est manquante ou mal saisie (le nom est indiqué) |
-| `Brevo : envoi de l'e-mail … status: 401` | `BREVO_API_KEY` fausse ou révoquée |
+| `Brevo : envoi de l'e-mail … status: 401` | `BREVO_API_KEY` fausse, révoquée ou clé SMTP (`xsmtpsib-`) au lieu d'une clé API v3 (`xkeysib-`) |
 | `Brevo : envoi de l'e-mail … status: 400` | Expéditeur `SENDER_EMAIL` non validé ou non authentifié chez Brevo (voir le message) |
 | `Brevo : inscription double opt-in … status: 400` | Modèle sans le lien `{{ params.DOIurl }}`, modèle inactif ou numéro de liste faux |
 | `status: 0, code: reseau` | Brevo injoignable |
@@ -116,20 +120,20 @@ Projet Pages > *Functions* > *Real-time logs* (*Begin log stream*), puis envoyer
 | `Turnstile : vérification refusée … invalid-input-secret` | `TURNSTILE_SECRET_KEY` fausse |
 | `SITE_URL n'est pas une adresse valide` | `SITE_URL` sans `https://` |
 
-### 4. Tester en local, sans clé Brevo
+### 4. Tester en local
 
-- `npm run test:fonctions` construit le site, lance `wrangler pages dev dist` avec une **API Brevo simulée** et un faux Turnstile (`scripts/tester-fonctions.mjs`), puis vérifie : envoi réussi, erreur Brevo (502), e-mail invalide (400), champ piège, Turnstile refusé (403), contact déjà inscrit, journaux sans clé ni données du visiteur. Rien n'est envoyé à Brevo ni à Cloudflare. La première exécution télécharge `wrangler` via `npx` (aucune dépendance n'est ajoutée à `package.json`).
-- `npm run dev:fonctions` lance le site avec les fonctions en local. Copiez d'abord `.dev.vars.example` en `.dev.vars` (ignoré par Git) et remplissez-le : avec une vraie clé Brevo, ce mode envoie de vrais e-mails.
-- Les variables `BREVO_API_URL` et `TURNSTILE_VERIFY_URL` ne servent qu'aux tests. Ne les définissez jamais en production.
+- **Sans clé Brevo (tests unitaires)** : `npm test` exécute les 26 tests de `tests/fonctions.test.mjs` avec une API Brevo simulée.
+- **Sans clé Brevo (aperçu visuel)** : mettre `PUBLIC_DEMO=true` dans `.env` puis lancer `npm run dev`.
+- **Avec vraie clé Brevo en local** : copier `.env.local.example` en `.env.local` (ignoré par Git), remplir `BREVO_API_KEY`, `SENDER_EMAIL` et `CONTACT_TO`, mettre `PUBLIC_DEMO=false` dans `.env` et lancer `npm run dev` sur `http://localhost:4321`.
 
 ## À compléter avant la mise en ligne
 
 - [ ] Adresse du site de Support Connecté : `supportConnecteUrl` dans `src/config.ts` (bouton « Visiter le site web » ; en attendant, il reste sur la carte).
-- [ ] Domaine définitif : `site` dans `astro.config.mjs` et `SITE_URL` (canonique, image de partage, sitemap, robots.txt).
+- [ ] Domaine définitif : `site` dans `astro.config.mjs` et `SITE_URL` (`https://lafrancosenegalaise.com`).
 - [ ] Raison sociale, forme juridique, adresse du siège, NINEA, RCCM, directeur de la publication : `src/config.ts`.
 - [ ] Pages légales : hébergeur, durée de conservation, cookies. Ce sont des modèles, à faire valider.
 - [ ] Logos officiels en SVG (plus nets), dont une version noire de chaque marque pour le bandeau.
-- [ ] Google Search Console (sitemap), fiche Google Business Profile à Saly, statistiques sans cookies (Cloudflare Web Analytics).
+- [ ] Google Search Console (sitemap), fiche Google Business Profile à Saly, statistiques sans cookies (ex. Vercel Web Analytics).
 
 ## Points de vigilance
 

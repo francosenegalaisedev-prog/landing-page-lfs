@@ -1,5 +1,5 @@
 /**
- * Tests des fonctions /api/contact et /api/newsletter, sans clé Brevo, sans réseau, sans Cloudflare.
+ * Tests des fonctions Vercel /api/contact et /api/newsletter, sans clé Brevo et sans réseau.
  * `fetch` est remplacé par une simulation : on vérifie les appels que les fonctions feraient à Brevo.
  *
  * Lancer : npm test
@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import { registerHooks } from 'node:module';
 import { afterEach, describe, test } from 'node:test';
 
-// Les fonctions importent « ../_brevo » sans extension (comme l'attend Cloudflare) ; Node veut « .ts ».
+// Les fonctions importent « ../lib/brevo » sans extension ; Node résout vers « .ts ».
 registerHooks({
 	resolve(specifier, contexte, suivant) {
 		if ((specifier.startsWith('./') || specifier.startsWith('../')) && !/\.[cm]?[jt]s$/.test(specifier)) {
@@ -22,8 +22,8 @@ registerHooks({
 	},
 });
 
-const { onRequestPost: contact } = await import('../functions/api/contact.ts');
-const { onRequestPost: newsletter } = await import('../functions/api/newsletter.ts');
+const { POST: contact } = await import('../api/contact.ts');
+const { POST: newsletter } = await import('../api/newsletter.ts');
 
 /* ------------------------------------------------------------ Outils */
 
@@ -31,6 +31,35 @@ const CLE = 'cle-de-test-brevo';
 const EMAIL_VISITEUR = 'visiteur@exemple.test';
 const MESSAGE_VISITEUR = 'Texte du message secret du visiteur';
 const NOM_VISITEUR = 'Awa Visiteur';
+
+const VARIABLES_FONCTIONS = [
+	'BREVO_API_KEY',
+	'BREVO_API_URL',
+	'SENDER_EMAIL',
+	'SENDER_NAME',
+	'CONTACT_TO',
+	'BREVO_LIST_ID',
+	'BREVO_DOI_TEMPLATE_ID',
+	'SITE_URL',
+	'TURNSTILE_SECRET_KEY',
+	'TURNSTILE_VERIFY_URL',
+];
+
+const envInitial = Object.fromEntries(VARIABLES_FONCTIONS.map((cle) => [cle, process.env[cle]]));
+
+function definirEnv(env = {}) {
+	for (const cle of VARIABLES_FONCTIONS) delete process.env[cle];
+	for (const [cle, valeur] of Object.entries(env)) {
+		if (valeur !== undefined) process.env[cle] = valeur;
+	}
+}
+
+function restaurerEnv() {
+	for (const cle of VARIABLES_FONCTIONS) {
+		if (envInitial[cle] === undefined) delete process.env[cle];
+		else process.env[cle] = envInitial[cle];
+	}
+}
 
 const envBase = { BREVO_API_KEY: CLE, SENDER_EMAIL: 'expediteur@test.invalid' };
 const envNewsletter = { ...envBase, BREVO_LIST_ID: '12', BREVO_DOI_TEMPLATE_ID: '34' };
@@ -65,6 +94,7 @@ afterEach(() => {
 	globalThis.fetch = fetchOriginal;
 	console.error = consoleErrorOriginal;
 	console.warn = consoleWarnOriginal;
+	restaurerEnv();
 });
 
 function requete(chemin, corps) {
@@ -76,7 +106,8 @@ function requete(chemin, corps) {
 }
 
 async function appeler(fonction, chemin, corps, env) {
-	const reponse = await fonction({ request: requete(chemin, corps), env });
+	definirEnv(env);
+	const reponse = await fonction(requete(chemin, corps));
 	return { status: reponse.status, corps: await reponse.json() };
 }
 
@@ -249,12 +280,13 @@ describe('/api/contact', () => {
 
 	test('envoi sans JavaScript : redirection 303 vers la page', async () => {
 		simuler();
+		definirEnv(envBase);
 		const sansJson = new Request('https://lafrancosenegalaise.com/api/contact', {
 			method: 'POST',
 			headers: { 'content-type': 'application/x-www-form-urlencoded' },
 			body: new URLSearchParams(demande).toString(),
 		});
-		const reponse = await contact({ request: sansJson, env: envBase });
+		const reponse = await contact(sansJson);
 		assert.equal(reponse.status, 303);
 		assert.equal(reponse.headers.get('location'), 'https://lafrancosenegalaise.com/?demande=envoyee#contact');
 	});
@@ -330,12 +362,13 @@ describe('/api/newsletter', () => {
 
 	test('JSON illisible : 400', async () => {
 		simuler();
+		definirEnv(envNewsletter);
 		const requeteCassee = new Request('https://lafrancosenegalaise.com/api/newsletter', {
 			method: 'POST',
 			headers: { 'content-type': 'application/json', accept: 'application/json' },
 			body: '{pas du json',
 		});
-		const reponse = await newsletter({ request: requeteCassee, env: envNewsletter });
+		const reponse = await newsletter(requeteCassee);
 		assert.equal(reponse.status, 400);
 		assert.equal(appels.length, 0);
 	});

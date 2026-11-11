@@ -1,6 +1,6 @@
 /**
  * Formulaire de contact et inscription à la newsletter : envoi sans rechargement vers les
- * fonctions Cloudflare (/api/contact, /api/newsletter), message de remerciement ou d'erreur,
+ * fonctions Vercel (/api/contact, /api/newsletter), message de remerciement ou d'erreur,
  * champ piège et, si une clé est fournie, widget anti-spam Cloudflare Turnstile.
  * Avec data-demo="true" sur le formulaire (PUBLIC_DEMO=true), l'envoi est simulé.
  */

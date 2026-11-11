@@ -33,10 +33,10 @@ export const site = {
  * ne sont pas en place (voir README, « Mise en ligne des formulaires »). Passer à true ensuite.
  */
 export const fonctionnalites = {
-	newsletter: false,
+	newsletter: true,
 };
 
-/** Envoi des formulaires : fonctions Cloudflare Pages du dossier functions/. */
+/** Envoi des formulaires : fonctions Vercel du dossier api/. */
 export const formulaires = {
 	contact: '/api/contact',
 	newsletter: '/api/newsletter',

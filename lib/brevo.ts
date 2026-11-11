@@ -1,10 +1,12 @@
 /**
  * Outils partagés par les fonctions /api/contact et /api/newsletter (appels à Brevo, journaux).
- * Ce fichier n'exporte aucune route : Cloudflare Pages ne le publie pas comme adresse.
+ * Placé dans lib/ (hors du dossier api/) pour que Vercel ne l'expose pas comme route publique.
  *
  * Règle des journaux : on écrit le statut, le code et le message renvoyés par Brevo, jamais la clé API
  * ni les données du visiteur (les adresses e-mail éventuelles d'un message d'erreur sont masquées).
  */
+
+declare const process: { env: Record<string, string | undefined> };
 
 export const API_BREVO_PAR_DEFAUT = 'https://api.brevo.com/v3';
 export const SITE_PAR_DEFAUT = 'https://lafrancosenegalaise.com';
@@ -68,7 +70,7 @@ export async function lireDonnees(request: Request): Promise<Record<string, stri
 }
 
 /** Appelle l'API Brevo. Ne lève jamais d'exception : une panne réseau devient { ok: false, status: 0 }. */
-export async function appelerBrevo(env: EnvBrevo, chemin: string, corps: unknown): Promise<ResultatBrevo> {
+export async function appelerBrevo(chemin: string, corps: unknown, env: EnvBrevo = process.env): Promise<ResultatBrevo> {
 	const base = env.BREVO_API_URL || API_BREVO_PAR_DEFAUT;
 	let reponse: Response;
 	try {
@@ -114,7 +116,7 @@ export type IssueInscription = 'ok' | 'deja-inscrit' | 'echec' | 'configuration'
  * Inscription en double opt-in : Brevo envoie lui-même l'e-mail de confirmation (modèle BREVO_DOI_TEMPLATE_ID)
  * et ne met le contact dans la liste BREVO_LIST_ID qu'une fois le lien cliqué.
  */
-export async function inscrireNewsletter(fonction: string, env: EnvBrevo, email: string): Promise<IssueInscription> {
+export async function inscrireNewsletter(fonction: string, email: string, env: EnvBrevo = process.env): Promise<IssueInscription> {
 	const liste = Number(env.BREVO_LIST_ID);
 	const modele = Number(env.BREVO_DOI_TEMPLATE_ID);
 	const manquantes: string[] = [];
@@ -134,12 +136,16 @@ export async function inscrireNewsletter(fonction: string, env: EnvBrevo, email:
 		return 'configuration';
 	}
 
-	const resultat = await appelerBrevo(env, 'contacts/doubleOptinConfirmation', {
-		email,
-		includeListIds: [liste],
-		templateId: modele,
-		redirectionUrl,
-	});
+	const resultat = await appelerBrevo(
+		'contacts/doubleOptinConfirmation',
+		{
+			email,
+			includeListIds: [liste],
+			templateId: modele,
+			redirectionUrl,
+		},
+		env,
+	);
 	if (resultat.ok) return 'ok';
 	if (estDejaInscrit(resultat)) {
 		console.warn(`[${fonction}] Newsletter : contact déjà connu de Brevo, traité comme une réussite`, {

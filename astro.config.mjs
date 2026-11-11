@@ -3,12 +3,10 @@ import fs from 'node:fs';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 
-/** Lit .dev.vars en développement local pour exécuter functions/api/* directement sous npm run dev. */
-function lireDevVars() {
-	/** @type {Record<string, string>} */
-	const env = {};
+/** Charge .env.local dans process.env en développement local pour exécuter api/* sous npm run dev. */
+function chargerEnvLocal() {
 	try {
-		const texte = fs.readFileSync(new URL('./.dev.vars', import.meta.url), 'utf8');
+		const texte = fs.readFileSync(new URL('./.env.local', import.meta.url), 'utf8');
 		for (const ligne of texte.split(/\r?\n/)) {
 			const propre = ligne.trim();
 			if (!propre || propre.startsWith('#')) continue;
@@ -16,12 +14,11 @@ function lireDevVars() {
 			if (egal <= 0) continue;
 			const cle = propre.slice(0, egal).trim();
 			const valeur = propre.slice(egal + 1).trim();
-			if (valeur) env[cle] = valeur;
+			if (valeur) process.env[cle] = valeur;
 		}
 	} catch {
-		// .dev.vars absent
+		// .env.local absent
 	}
-	return env;
 }
 
 // https://astro.build/config
@@ -33,7 +30,8 @@ export default defineConfig({
 		plugins: [
 			tailwindcss(),
 			{
-				name: 'fonctions-pages-dev',
+				name: 'fonctions-api-dev',
+				apply: 'serve',
 				configureServer(server) {
 					return () => {
 						server.middlewares.stack.unshift({
@@ -45,6 +43,7 @@ export default defineConfig({
 									return;
 								}
 								try {
+									chargerEnvLocal();
 									const morceaux = [];
 									for await (const m of req) morceaux.push(Buffer.isBuffer(m) ? m : Buffer.from(m));
 									const corps = Buffer.concat(morceaux);
@@ -58,9 +57,9 @@ export default defineConfig({
 										headers,
 										body: corps,
 									});
-									const fichier = url === '/api/contact' ? './functions/api/contact.ts' : './functions/api/newsletter.ts';
+									const fichier = url === '/api/contact' ? './api/contact.ts' : './api/newsletter.ts';
 									const moduleFonction = await server.ssrLoadModule(fichier);
-									const reponse = await moduleFonction.onRequestPost({ request, env: lireDevVars() });
+									const reponse = await moduleFonction.POST(request);
 									res.statusCode = reponse.status;
 									reponse.headers.forEach((valeur, cle) => res.setHeader(cle, valeur));
 									const buffer = Buffer.from(await reponse.arrayBuffer());

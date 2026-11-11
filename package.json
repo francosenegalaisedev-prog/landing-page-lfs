@@ -13,8 +13,6 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "node --test tests/fonctions.test.mjs",
-    "dev:fonctions": "npm run build && npx --yes wrangler@4 pages dev dist",
-    "test:fonctions": "npm run build && node scripts/tester-fonctions.mjs",
     "astro": "astro"
   },
   "dependencies": {
