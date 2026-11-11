@@ -1,0 +1,32 @@
+---
+/* MODÈLE À COMPLÉTER ET À FAIRE VALIDER avant la mise en ligne (valeurs dans src/config.ts). */
+import PageSimple from '../components/PageSimple.astro';
+import { site } from '../config';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout titre="Mentions légales | La Franco-Sénégalaise" description="Mentions légales du site de La Franco-Sénégalaise.">
+	<PageSimple titre="Mentions légales">
+		<h2>Éditeur du site</h2>
+		<p>
+			{site.nom}, {site.legal.raisonSociale}<br />
+			Siège&nbsp;: {site.legal.adresse}, Saly, Sénégal<br />
+			NINEA&nbsp;: {site.legal.ninea} · RCCM&nbsp;: {site.legal.rccm}<br />
+			E-mail&nbsp;: <a href={`mailto:${site.email}`}>{site.email}</a> · Téléphone&nbsp;: <a href={site.telephoneSenegal.lien}>{site.telephoneSenegal.affichage}</a>
+		</p>
+
+		<h2>Directeur de la publication</h2>
+		<p>{site.legal.directeurPublication}</p>
+
+		<h2>Hébergement</h2>
+		<p>Cloudflare, Inc. (service Cloudflare Pages)&nbsp;: [adresse et téléphone de l’hébergeur à compléter].</p>
+
+		<h2>Propriété intellectuelle</h2>
+		<p>
+			Les textes, logos et visuels de ce site appartiennent à {site.nom} ou à ses marques. Toute reproduction sans autorisation écrite est interdite.
+		</p>
+
+		<h2>Données personnelles</h2>
+		<p>Voir la <a href="/confidentialite">politique de confidentialité</a>.</p>
+	</PageSimple>
+</Layout>

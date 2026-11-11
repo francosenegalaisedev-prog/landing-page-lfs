@@ -1,0 +1,74 @@
+---
+/** Carte d'une filiale ou d'un projet (Support Connecté, Nëkk, Teranga Immobilier, Musée de la mémoire). */
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import type { PoleId } from '../data/poles';
+import Icone from './Icone.astro';
+import type { ThemeCarte } from '../types';
+import PastillesPoles from './PastillesPoles.astro';
+
+interface Props {
+	/** Identifiant de l'article (ex. filiale-sc ou projet-musee). */
+	id: string;
+	/** Identifiant du titre h3 pour aria-labelledby (ex. t-sc). */
+	titreId: string;
+	theme: Exclude<ThemeCarte, 'noir'>;
+	/** Classes de largeur (flex-basis), écrites en toutes lettres pour Tailwind. */
+	largeur: string;
+	logo?: { image: ImageMetadata; alt: string; classe: string };
+	/** Nom écrit en toutes lettres quand le projet n'a pas de logo. */
+	nomEnTexte?: string;
+	categorie: string;
+	/** Couleur du point devant la catégorie (classe Tailwind). */
+	point: string;
+	badge?: string;
+	titre: string;
+	texte: string;
+	poles: PoleId[];
+	lien?: { libelle: string; href: string };
+}
+
+const { id, titreId, theme, largeur, logo, nomEnTexte, categorie, point, badge, titre, texte, poles, lien } = Astro.props;
+
+const styles = {
+	blanc: { carte: 'border border-trait-clair bg-white text-noir', categorie: 'text-noir', titre: 'text-noir', texte: 'text-encre-2' },
+	teranga: { carte: 'border border-[#1f5a4b] bg-[#0f3d33] text-white', categorie: 'text-white', titre: 'text-white', texte: 'text-[#d7e6e0]' },
+	musee: { carte: 'border border-[#4a2326] bg-[#2a1113] text-creme', categorie: 'text-miel', titre: 'text-creme', texte: 'text-[#e2cfc6]' },
+}[theme];
+---
+
+<article
+	id={id}
+	aria-labelledby={titreId}
+	class={`effet-carte flex min-w-0 flex-col items-start gap-3.5 rounded-[18px] p-7 ${largeur} ${styles.carte}`}
+>
+	<div class="flex h-14 items-center">
+		{logo && <Image src={logo.image} alt={logo.alt} class={`block h-auto w-auto max-w-full ${logo.classe}`} />}
+		{nomEnTexte && <p class="font-accent text-[30px] leading-none font-semibold text-miel italic">{nomEnTexte}</p>}
+	</div>
+
+	<div class="flex flex-wrap items-center gap-x-3.5 gap-y-2.5">
+		<span class={`inline-flex items-center gap-2 text-[12.5px] font-semibold tracking-[0.12em] uppercase ${styles.categorie}`}>
+			<span aria-hidden="true" class={`block size-2 rounded-full ${point}`}></span>{categorie}
+		</span>
+		{badge && (
+			<span class="inline-flex items-center gap-[7px] rounded-full bg-[#dceee3] px-[11px] py-1 text-[12.5px] font-semibold text-[#006838]">
+				<span aria-hidden="true" class="block size-[7px] rounded-full bg-[#006838]"></span>{badge}
+			</span>
+		)}
+	</div>
+
+	<h3 id={titreId} class={`font-titre text-[23px] leading-[1.15] font-semibold tracking-[-0.015em] text-balance ${styles.titre}`}>{titre}</h3>
+	<p class={`text-[16px] leading-[1.6] text-pretty ${styles.texte}`}>{texte}</p>
+
+	<PastillesPoles poles={poles} theme={theme} enBas={!lien} />
+
+	{lien && (
+		<a href={lien.href} class="mt-auto inline-flex min-h-11 items-center gap-2.5 text-[15px] font-semibold text-noir">
+			{lien.libelle}
+			<span aria-hidden="true" class="flex size-8 items-center justify-center rounded-lg bg-noir text-creme">
+				<Icone nom="fleche" class="size-4" />
+			</span>
+		</a>
+	)}
+</article>

@@ -1,0 +1,43 @@
+---
+/**
+ * Bandeau défilant des filiales de la maison mère.
+ * La liste est répétée pour une boucle sans couture ; seul le premier passage est lu par
+ * les lecteurs d'écran. Le défilement s'arrête si l'utilisateur demande moins d'animations.
+ */
+import { Image } from 'astro:assets';
+import { marques } from '../data/marques';
+
+const passages = [0, 1, 2, 3];
+---
+
+<div class="overflow-hidden border-y border-ambre-fonce bg-ambre">
+	<div class="flex w-max animate-defile motion-reduce:animate-none">
+		<ul aria-label="Nos filiales" class="flex items-center py-3.5">
+			{passages.map((passage) =>
+				marques.map((marque) => (
+					<li aria-hidden={passage > 0 ? 'true' : undefined} class="flex flex-none items-center gap-12 pr-12">
+						<Image
+							src={marque.logo}
+							alt={passage > 0 ? '' : marque.nom}
+							width={marque.largeur}
+							height={marque.hauteur}
+							loading="eager"
+							class="block brightness-0"
+						/>
+						<span aria-hidden="true" class="block h-0.5 w-4 rounded-[1px] bg-noir"></span>
+					</li>
+				)),
+			)}
+		</ul>
+		<ul aria-hidden="true" class="flex items-center py-3.5">
+			{passages.map(() =>
+				marques.map((marque) => (
+					<li class="flex flex-none items-center gap-12 pr-12">
+						<Image src={marque.logo} alt="" width={marque.largeur} height={marque.hauteur} loading="eager" class="block brightness-0" />
+						<span class="block h-0.5 w-4 rounded-[1px] bg-noir"></span>
+					</li>
+				)),
+			)}
+		</ul>
+	</div>
+</div>

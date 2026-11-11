@@ -1,0 +1,111 @@
+---
+import { Image } from 'astro:assets';
+import logoNekk from '../assets/marques/nekk-carte.webp';
+import logoSupportConnecte from '../assets/marques/support-connecte.png';
+import logoTeranga from '../assets/marques/teranga-immobilier-blanc.png';
+import logoYeeg from '../assets/marques/yeeg-blanc.png';
+import { site } from '../config';
+import CarteProjet from './CarteProjet.astro';
+import PastillesPoles from './PastillesPoles.astro';
+
+// Tant que l'adresse n'est pas renseignée dans src/config.ts, le bouton reste sur la carte.
+const siteSupportConnecte = site.supportConnecteUrl || '#site-support-connecte';
+---
+
+<section id="filiales" aria-labelledby="t-filiales" class="gouttiere section-y bg-creme text-noir">
+	<div class="mx-auto flex max-w-page flex-col gap-9">
+		<div class="flex flex-wrap items-end justify-between gap-x-12 gap-y-5">
+			<div class="flex min-w-0 flex-[1_1_560px] flex-col items-start gap-4">
+				<p class="surtitre text-bronze">Nos filiales</p>
+				<h2 id="t-filiales" class="titre-section text-noir">
+					Nos filiales, <em class="accent tracking-normal text-bronze">notre écosystème.</em>
+				</h2>
+				<p class="max-w-[620px] text-[17px] leading-[1.6] text-pretty text-encre-2">
+					Chaque filiale a son offre et ses interlocuteurs. Pour une prestation, adressez-vous directement à elle.
+				</p>
+			</div>
+		</div>
+
+		<div class="flex flex-col gap-4">
+			<div class="flex flex-wrap gap-4">
+				<article
+					id="filiale-yeeg"
+					aria-labelledby="t-yeeg"
+					class="effet-carte flex min-w-0 flex-[1.7_1_520px] flex-wrap items-end justify-between gap-x-10 gap-y-7 rounded-[18px] bg-black p-[clamp(26px,3.4vw,48px)] text-white"
+				>
+					<div class="flex min-w-0 flex-[1_1_320px] flex-col items-start gap-4">
+						<Image src={logoYeeg} alt="YÉEG" class="block h-[clamp(36px,3.4vw,48px)] w-auto" />
+						<div class="flex flex-wrap items-center gap-x-3.5 gap-y-2.5">
+							<span class="inline-flex items-center gap-2 text-[12.5px] font-semibold tracking-[0.12em] text-white uppercase">
+								<span aria-hidden="true" class="block size-2 rounded-full bg-[#e30613]"></span>Communication et stratégie haut de gamme
+							</span>
+						</div>
+						<h3 id="t-yeeg" class="font-titre text-[clamp(24px,2.4vw,32px)] leading-[1.1] font-semibold tracking-[-0.02em] text-balance text-white">
+							Stratégie et communication pour le luxe, le haut de gamme et les grands comptes.
+						</h3>
+						<p class="max-w-[520px] text-[16px] leading-[1.6] text-[#cfcfcf]">Agence de communication 360&nbsp;: stratégie, images et contenus sur mesure.</p>
+						<PastillesPoles poles={['communication', 'marketing']} theme="noir" />
+					</div>
+					<div class="flex min-w-0 flex-[0_1_220px] flex-col items-start gap-3">
+						<span aria-hidden="true" class="block h-2 w-14 -skew-x-34 bg-[#e30613]"></span>
+						<p lang="wo" class="font-accent text-[clamp(28px,2.5vw,36px)] leading-[1.06] font-medium text-white italic">«&nbsp;Dox dem fima beuge yegg&nbsp;»</p>
+					</div>
+				</article>
+
+				<CarteProjet
+					id="filiale-sc"
+					titreId="t-sc"
+					theme="blanc"
+					largeur="flex-[1_1_300px]"
+					logo={{ image: logoSupportConnecte, alt: 'Support Connecté', classe: 'max-h-9' }}
+					categorie="Cartes digitales et NFC"
+					point="bg-[#e00818]"
+					badge="Nouvelle version bientôt en ligne"
+					titre="Cartes digitales et supports connectés"
+					texte="Cartes NFC, stickers QR, panneaux et textiles."
+					poles={['informatique', 'impression']}
+					lien={{ libelle: 'Visiter le site web', href: siteSupportConnecte }}
+				/>
+			</div>
+
+			<div class="flex flex-wrap gap-4">
+				<CarteProjet
+					id="filiale-nekk"
+					titreId="t-nekk"
+					theme="blanc"
+					largeur="flex-[1_1_300px]"
+					logo={{ image: logoNekk, alt: 'Nëkk, Votre monde en un clic', classe: 'max-h-14' }}
+					categorie="Commerce de proximité"
+					point="bg-[#00a030]"
+					titre="Une page pour chaque commerce"
+					texte="À partager sur WhatsApp, avec les produits, les prix et l’adresse."
+					poles={['informatique', 'marketing']}
+				/>
+				<CarteProjet
+					id="filiale-teranga"
+					titreId="t-teranga"
+					theme="teranga"
+					largeur="flex-[1_1_300px]"
+					logo={{ image: logoTeranga, alt: 'Teranga Immobilier', classe: 'max-h-[42px]' }}
+					categorie="Immobilier"
+					point="bg-[#d4572e]"
+					titre="Le portail immobilier du Sénégal"
+					texte="Acheter, louer, vendre, estimer."
+					poles={['informatique', 'marketing']}
+				/>
+				<CarteProjet
+					id="projet-musee"
+					titreId="t-musee"
+					theme="musee"
+					largeur="flex-[1.4_1_340px]"
+					nomEnTexte="Musée de la mémoire"
+					categorie="Projet culturel"
+					point="bg-ambre"
+					titre="Pour que la mémoire ne se perde pas"
+					texte="Un musée virtuel, puis un lieu ouvert au public, consacré à la mémoire de la traite négrière, autour de l’œuvre de l’artiste Lamine Barro."
+					poles={['informatique', 'communication', 'impression']}
+				/>
+			</div>
+		</div>
+	</div>
+</section>

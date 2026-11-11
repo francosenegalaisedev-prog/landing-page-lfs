@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo/la-franco-senegalaise.png';
+import { fonctionnalites, formulaires, site } from '../config';
+
+const groupe = [
+	{ href: '#phygital', libelle: 'Du digital au physique' },
+	{ href: '#conviction', libelle: 'Notre conviction' },
+	{ href: '#groupe', libelle: 'Qui sommes-nous' },
+	{ href: '#expertises', libelle: 'Nos expertises' },
+	{ href: '#methode', libelle: 'Notre méthode' },
+];
+
+const filiales = [
+	{ href: '#filiale-yeeg', libelle: 'YÉEG' },
+	{ href: '#filiale-sc', libelle: 'Support Connecté' },
+	{ href: '#filiale-nekk', libelle: 'Nëkk' },
+	{ href: '#filiale-teranga', libelle: 'Teranga Immobilier' },
+	{ href: '#projet-musee', libelle: 'Musée de la mémoire' },
+];
+
+const informations = [
+	{ href: '#carrieres', libelle: 'Carrières' },
+	{ href: '#contact', libelle: 'Contact' },
+	{ href: '/mentions-legales', libelle: 'Mentions légales' },
+	{ href: '/confidentialite', libelle: 'Politique de confidentialité' },
+];
+
+const titreColonne = 'mb-1 text-[12.5px] font-semibold tracking-[0.14em] text-miel uppercase';
+const lien = 'text-[15px] text-texte-2 hover:text-creme';
+---
+
+<footer class="bg-noir text-texte-2">
+	<div class="gouttiere pt-[clamp(56px,6vw,88px)] pb-10">
+		<div class="mx-auto flex max-w-page flex-col gap-10">
+			{fonctionnalites.newsletter && (
+			<div
+				id="newsletter"
+				class="flex flex-wrap items-end justify-between gap-x-12 gap-y-6 rounded-[18px] border border-trait-1 bg-surface-3 p-[clamp(24px,3.4vw,44px)]"
+			>
+				<div class="flex max-w-[520px] flex-[1_1_320px] flex-col gap-2.5">
+					<h2 class="font-titre text-[clamp(26px,2.8vw,38px)] leading-[1.1] font-semibold tracking-[-0.02em] text-creme">Newsletter</h2>
+					<p class="text-[16px] leading-[1.6] text-texte-3">Les nouvelles du groupe, de nos filiales et de nos projets.</p>
+				</div>
+				<div class="max-w-[520px] min-w-0 flex-[1_1_360px]">
+					<form
+						data-formulaire="newsletter"
+						action={formulaires.newsletter}
+						method="post"
+						data-demo={formulaires.demo ? 'true' : undefined}
+						aria-label="Inscription à la newsletter"
+						class="flex flex-wrap items-end gap-3"
+					>
+						<div class="flex min-w-0 flex-[1_1_220px] flex-col gap-1.5">
+							<label for="nl-email" class="text-[14px] leading-[1.4] font-semibold text-texte-2">Votre e-mail</label>
+							<input
+								id="nl-email"
+								name="email"
+								type="email"
+								autocomplete="email"
+								required
+								class="min-h-[54px] w-full rounded-[10px] border border-champ bg-noir px-4 py-3 text-[16px] leading-[1.4] text-creme"
+							/>
+						</div>
+						<div aria-hidden="true" class="absolute -left-[9999px] h-px w-px overflow-hidden">
+							<label for="nl-site">Ne pas remplir</label>
+							<input id="nl-site" name="site_web" type="text" tabindex="-1" autocomplete="off" />
+						</div>
+						<button
+							type="submit"
+							class="effet-bouton inline-flex min-h-[54px] cursor-pointer items-center justify-center rounded-[10px] bg-ambre px-[26px] text-[16px] leading-[1.2] font-semibold text-noir disabled:cursor-wait disabled:opacity-70"
+						>M’inscrire</button>
+						<p data-erreur hidden role="alert" class="basis-full text-[15px] leading-[1.5] text-marketing">
+							L’inscription n’a pas abouti. Réessayez dans un instant.
+						</p>
+					</form>
+					<p data-merci="newsletter" hidden role="status" class="text-[16px] leading-[1.6] text-creme">
+						Merci&nbsp;! Confirmez votre inscription grâce à l’e-mail que nous venons de vous envoyer.
+					</p>
+				</div>
+			</div>
+			)}
+
+			<div class="flex flex-wrap items-start justify-between gap-x-12 gap-y-8">
+				<div class="flex min-w-0 flex-[1_1_260px] flex-col items-start gap-3.5">
+					<Image src={logo} alt="La Franco-Sénégalaise" class="block h-auto w-full max-w-[280px]" />
+					<p class="text-[14px] leading-[1.5] text-texte-3">Maison mère établie au Sénégal.</p>
+				</div>
+				<nav aria-label="Le groupe" class="flex flex-col gap-2">
+					<p class={titreColonne}>Le groupe</p>
+					{groupe.map((item) => <a href={item.href} class={lien}>{item.libelle}</a>)}
+				</nav>
+				<nav aria-label="Nos filiales" class="flex flex-col gap-2">
+					<p class={titreColonne}>Nos filiales</p>
+					{filiales.map((filiale) => <a href={filiale.href} class={lien}>{filiale.libelle}</a>)}
+				</nav>
+				<nav aria-label="Informations" class="flex flex-col gap-2">
+					<p class={titreColonne}>Informations</p>
+					{informations.map((info) => <a href={info.href} class={lien}>{info.libelle}</a>)}
+				</nav>
+			</div>
+
+			<p class="border-t border-trait-1 pt-6 text-[13.5px] leading-[1.6] text-texte-3">
+				© {new Date().getFullYear()} <span class="whitespace-nowrap">{site.nom}</span> · {site.legal.raisonSociale} · Siège&nbsp;: {site.legal.adresse}, Saly, Sénégal · NINEA {site.legal.ninea} · RCCM {site.legal.rccm} · Directeur de la publication&nbsp;: {site.legal.directeurPublication}
+			</p>
+		</div>
+	</div>
+	<div aria-hidden="true" class="flex flex-col gap-[3px] pb-[5px]">
+		<div class="h-1 bg-ambre"></div>
+		<div class="h-0.5 bg-miel"></div>
+		<div class="h-px bg-sable"></div>
+	</div>
+</footer>

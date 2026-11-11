@@ -1,0 +1,44 @@
+---
+import Icone, { type NomIcone } from './Icone.astro';
+
+const jalons: { icone: NomIcone; libelle: string }[] = [
+	{ icone: 'camera', libelle: 'Film institutionnel' },
+	{ icone: 'ecran', libelle: 'Plateforme web' },
+	{ icone: 'borne', libelle: 'Borne interactive' },
+	{ icone: 'lieu', libelle: 'Espace d’accueil' },
+];
+---
+
+<section id="conviction" aria-labelledby="t-conviction" class="gouttiere section-y bg-creme text-noir">
+	<div class="mx-auto flex max-w-page flex-col gap-[clamp(36px,4vw,56px)]">
+		<div class="flex flex-col items-start gap-4">
+			<p class="surtitre text-bronze">Notre conviction</p>
+			<h2
+				id="t-conviction"
+				class="max-w-[1040px] font-titre text-[clamp(30px,3.9vw,54px)] leading-[1.06] font-bold tracking-[-0.03em] text-balance text-noir"
+			>
+				Une organisation ne communique pas par canaux séparés&nbsp;:<br /> <em class="accent tracking-normal text-bronze">elle est perçue comme un&nbsp;tout.</em>
+			</h2>
+			<p class="max-w-[680px] text-[clamp(17px,1.4vw,19px)] leading-[1.65] text-pretty text-encre-2">
+				Nos pôles relient le digital et le physique pour que chaque point de contact raconte la même histoire.
+			</p>
+		</div>
+
+		<div class="relative">
+			<div aria-hidden="true" class="absolute top-8 right-[12.5%] left-[12.5%] h-px bg-ambre max-[761px]:hidden"></div>
+			<ol
+				aria-label="Une même histoire, du film à l’espace d’accueil"
+				class="relative grid grid-cols-4 gap-x-4 gap-y-6 max-[761px]:grid-cols-2"
+			>
+				{jalons.map((jalon) => (
+					<li class="relative z-[1] flex flex-col items-center gap-3 text-center">
+						<span aria-hidden="true" class="flex size-16 items-center justify-center rounded-full border border-trait-clair bg-white text-bronze">
+							<Icone nom={jalon.icone} class="size-[26px]" />
+						</span>
+						<span class="font-titre text-[17px] leading-[1.25] font-semibold text-noir">{jalon.libelle}</span>
+					</li>
+				))}
+			</ol>
+		</div>
+	</div>
+</section>

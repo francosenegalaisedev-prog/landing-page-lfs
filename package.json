@@ -1,0 +1,26 @@
+{
+  "name": "la-franco-senegalaise",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site vitrine de La Franco-Sénégalaise (Astro + Tailwind CSS)",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "node --test tests/fonctions.test.mjs",
+    "dev:fonctions": "npm run build && npx --yes wrangler@4 pages dev dist",
+    "test:fonctions": "npm run build && node scripts/tester-fonctions.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.4.7",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.5"
+  }
+}

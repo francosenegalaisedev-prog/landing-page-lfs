@@ -1,0 +1,98 @@
+---
+/** Icônes au trait (24 × 24), dessinées dans la couleur du texte. */
+import type { HTMLAttributes } from 'astro/types';
+
+type Forme =
+	| { type: 'path'; d: string }
+	| { type: 'rect'; x: number; y: number; width: number; height: number; rx: number };
+
+const formes = {
+	fleche: [
+		{ type: 'path', d: 'M5 12h14' },
+		{ type: 'path', d: 'M13 6l6 6-6 6' },
+	],
+	menu: [
+		{ type: 'path', d: 'M4 7h16' },
+		{ type: 'path', d: 'M4 12h16' },
+		{ type: 'path', d: 'M4 17h16' },
+	],
+	fermer: [
+		{ type: 'path', d: 'M6 6l12 12' },
+		{ type: 'path', d: 'M18 6L6 18' },
+	],
+	coche: [{ type: 'path', d: 'M5 12.5l4.5 4.5L19 7' }],
+	code: [
+		{ type: 'path', d: 'M8.5 7.5L4 12l4.5 4.5' },
+		{ type: 'path', d: 'M15.5 7.5L20 12l-4.5 4.5' },
+		{ type: 'path', d: 'M13.5 5l-3 14' },
+	],
+	'porte-voix': [
+		{ type: 'path', d: 'M4 10.5v3a1 1 0 0 0 1 1h2.5L13 18.5v-13L7.5 9.5H5a1 1 0 0 0-1 1z' },
+		{ type: 'path', d: 'M16.5 9a4 4 0 0 1 0 6' },
+		{ type: 'path', d: 'M19 6.5a7.5 7.5 0 0 1 0 11' },
+	],
+	courbe: [
+		{ type: 'path', d: 'M4 19.5h16' },
+		{ type: 'path', d: 'M5 15l4.5-4.5 3.5 3.5L19 8' },
+		{ type: 'path', d: 'M14.5 8H19v4.5' },
+	],
+	camera: [
+		{ type: 'rect', x: 3, y: 6.5, width: 13, height: 11, rx: 2.5 },
+		{ type: 'path', d: 'M16 10.5l5-3v9l-5-3z' },
+	],
+	phygital: [
+		{ type: 'rect', x: 3, y: 6, width: 11, height: 12, rx: 2 },
+		{ type: 'path', d: 'M6.5 14.5h4' },
+		{ type: 'path', d: 'M17 9.5a3.5 3.5 0 0 1 0 5' },
+		{ type: 'path', d: 'M19.5 7a7 7 0 0 1 0 10' },
+	],
+	ecran: [
+		{ type: 'rect', x: 3, y: 4.5, width: 18, height: 12, rx: 2 },
+		{ type: 'path', d: 'M8.5 20h7' },
+		{ type: 'path', d: 'M12 16.5V20' },
+	],
+	borne: [
+		{ type: 'rect', x: 7, y: 3, width: 10, height: 13, rx: 1.5 },
+		{ type: 'path', d: 'M10 12.5h4' },
+		{ type: 'path', d: 'M12 16v3.5' },
+		{ type: 'path', d: 'M9 20h6' },
+	],
+	lieu: [
+		{ type: 'path', d: 'M4 20.5h16' },
+		{ type: 'path', d: 'M5.5 20.5V8.5L12 4l6.5 4.5v12' },
+		{ type: 'path', d: 'M10 20.5v-5h4v5' },
+	],
+} satisfies Record<string, Forme[]>;
+
+export type NomIcone = keyof typeof formes;
+
+interface Props extends HTMLAttributes<'svg'> {
+	nom: NomIcone;
+	epaisseur?: number;
+}
+
+const { nom, epaisseur = 1.75, class: classe = '', ...reste } = Astro.props;
+const dessin: Forme[] = formes[nom];
+---
+
+<svg
+	viewBox="0 0 24 24"
+	aria-hidden="true"
+	fill="none"
+	stroke="currentColor"
+	stroke-width={epaisseur}
+	stroke-linecap="round"
+	stroke-linejoin="round"
+	class={`block flex-none ${classe}`}
+	{...reste}
+>
+	{
+		dessin.map((forme) =>
+			forme.type === 'rect' ? (
+				<rect x={forme.x} y={forme.y} width={forme.width} height={forme.height} rx={forme.rx} />
+			) : (
+				<path d={forme.d} />
+			),
+		)
+	}
+</svg>

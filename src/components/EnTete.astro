@@ -1,0 +1,79 @@
+---
+import logo from '../assets/logo/la-franco-senegalaise-horizontal.png';
+import Icone from './Icone.astro';
+
+const navigation = [
+	{ href: '#groupe', libelle: 'Le groupe' },
+	{ href: '#expertises', libelle: 'Nos expertises' },
+	{ href: '#carrieres', libelle: 'Carrières' },
+	{ href: '#contact', libelle: 'Contact' },
+];
+
+const menuMobile = [
+	{ href: '#phygital', libelle: 'Du digital au physique', numero: '01' },
+	{ href: '#groupe', libelle: 'Le groupe', numero: '02' },
+	{ href: '#filiales', libelle: 'Nos filiales', numero: '03' },
+	{ href: '#expertises', libelle: 'Nos expertises', numero: '04' },
+	{ href: '#carrieres', libelle: 'Carrières', numero: '05' },
+];
+---
+
+<div class="sticky top-0 z-50">
+	<div aria-hidden="true" class="h-[3px] bg-ambre"></div>
+	<header class="gouttiere border-b border-trait-1 bg-noir/92 py-3 backdrop-blur-[14px]">
+		<div class="mx-auto flex max-w-page flex-wrap items-center justify-between gap-x-[clamp(12px,2vw,28px)] gap-y-3">
+			<a href="#haut" class="flex flex-none">
+				<img src={logo.src} width={logo.width} height={logo.height} alt="La Franco-Sénégalaise" class="block h-[clamp(24px,2.6vw,36px)] w-auto" />
+			</a>
+
+			<nav aria-label="Navigation principale" class="ml-auto flex items-center gap-7 text-[15px] font-medium max-[861px]:hidden">
+				{navigation.map((lien) => (
+					<a href={lien.href} class="text-texte-2 hover:text-creme">{lien.libelle}</a>
+				))}
+			</nav>
+
+			<div class="flex flex-none items-center gap-2.5">
+				<a
+					href="#filiales"
+					class="effet-bouton inline-flex min-h-11 items-center justify-center rounded-[10px] bg-ambre px-5 text-[15px] leading-[1.2] font-semibold text-noir max-[521px]:hidden"
+				>Nos filiales</a>
+				<button
+					type="button"
+					data-menu-bouton
+					aria-expanded="false"
+					aria-controls="menu-mobile"
+					aria-label="Menu"
+					class="group inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-2 rounded-[10px] border border-trait-3 px-3 text-[15px] leading-[1.2] font-semibold text-creme min-[861px]:hidden"
+				>
+					<Icone nom="menu" class="size-5 group-aria-expanded:hidden" />
+					<Icone nom="fermer" class="hidden size-5 group-aria-expanded:block" />
+					<span class="max-[521px]:hidden">Menu</span>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<nav
+		id="menu-mobile"
+		aria-label="Menu"
+		hidden
+		class="gouttiere absolute inset-x-0 top-full flex max-h-[calc(100vh-72px)] flex-col overflow-y-auto border-b border-trait-1 bg-noir pt-1 pb-6 shadow-[0_24px_48px_rgba(0,0,0,0.35)] min-[861px]:hidden"
+	>
+		{menuMobile.map((lien) => (
+			<a
+				href={lien.href}
+				class="flex min-h-14 items-center justify-between gap-4 border-b border-trait-1 font-titre text-[20px] leading-[1.2] font-semibold text-creme"
+			>
+				{lien.libelle}<span aria-hidden="true" class="text-[13px] text-texte-4">{lien.numero}</span>
+			</a>
+		))}
+		<a
+			href="#contact"
+			class="effet-bouton mt-5 inline-flex min-h-[52px] items-center justify-center gap-2.5 rounded-[10px] bg-ambre px-6 text-[16px] leading-[1.2] font-semibold text-noir"
+		>Contact<Icone nom="fleche" class="size-[18px]" /></a>
+	</nav>
+</div>
+
+<script>
+	import '../scripts/menu.ts';
+</script>

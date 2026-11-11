@@ -1,0 +1,39 @@
+---
+/* MODÈLE À COMPLÉTER ET À FAIRE VALIDER avant la mise en ligne. */
+import PageSimple from '../components/PageSimple.astro';
+import { site } from '../config';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+	titre="Politique de confidentialité | La Franco-Sénégalaise"
+	description="Comment La Franco-Sénégalaise utilise les données envoyées par le formulaire et la newsletter."
+>
+	<PageSimple titre="Politique de confidentialité">
+		<h2>Responsable du traitement</h2>
+		<p>{site.nom}, {site.legal.raisonSociale}, {site.legal.adresse}, Saly, Sénégal. Contact&nbsp;: <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+
+		<h2>Données collectées</h2>
+		<ul>
+			<li>Formulaire de contact&nbsp;: nom et prénom, organisation, e-mail, téléphone, objet et message.</li>
+			<li>Newsletter&nbsp;: adresse e-mail, avec votre accord, confirmé par un e-mail.</li>
+		</ul>
+
+		<h2>Utilisation</h2>
+		<p>Ces données servent uniquement à répondre à votre demande et, si vous l’avez choisi, à vous envoyer notre newsletter. Elles ne sont ni vendues ni louées.</p>
+
+		<h2>Prestataires</h2>
+		<p>Le site est hébergé par Cloudflare (Cloudflare Pages), qui fournit aussi la protection anti-spam du formulaire (Turnstile). Les e-mails et la newsletter passent par Brevo. Les polices de caractères sont chargées depuis Google Fonts.</p>
+
+		<h2>Durée de conservation</h2>
+		<p>[À définir&nbsp;: durée de conservation des demandes et des inscriptions.]</p>
+
+		<h2>Vos droits</h2>
+		<p>
+			Vous pouvez demander l’accès à vos données, leur rectification ou leur suppression en écrivant à <a href={`mailto:${site.email}`}>{site.email}</a>. Chaque newsletter contient un lien de désinscription. Vous pouvez aussi saisir la Commission de protection des données personnelles (CDP) du Sénégal.
+		</p>
+
+		<h2>Cookies</h2>
+		<p>[À compléter selon les outils retenus, par exemple des statistiques de visite sans cookies.]</p>
+	</PageSimple>
+</Layout>

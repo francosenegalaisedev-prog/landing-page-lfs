@@ -1,0 +1,138 @@
+---
+/**
+ * Contact : coordonnées et formulaire de contact.
+ * Envoi en JavaScript vers /api/contact (functions/api/contact.ts), sans rechargement ;
+ * sans JavaScript, le formulaire est posté normalement et la fonction renvoie vers #contact.
+ */
+import { fonctionnalites, formulaires, site } from '../config';
+import { sujets } from '../data/contact';
+import Icone from './Icone.astro';
+
+const champ =
+	'min-h-[52px] w-full rounded-[10px] border border-champ bg-white px-4 py-3 text-[16px] leading-[1.4] text-noir';
+const libelle = 'text-[14px] leading-[1.4] font-semibold text-encre-4';
+---
+
+<section id="contact" aria-labelledby="t-contact" class="gouttiere section-y bg-creme text-noir">
+	<div class="mx-auto flex max-w-page flex-wrap items-start gap-x-16 gap-y-12">
+		<div class="flex min-w-0 flex-[1_1_320px] flex-col items-start gap-4">
+			<p class="surtitre text-bronze">Contact</p>
+			<h2 id="t-contact" class="titre-section text-noir">
+				Contacter <em class="accent tracking-normal text-bronze">le&nbsp;groupe.</em>
+			</h2>
+			<p class="max-w-[460px] text-[17px] leading-[1.6] text-pretty text-encre-2">
+				Projet d’envergure, projet commun avec une institution, demande média ou candidature&nbsp;: écrivez-nous. Les demandes de prestation sont à adresser aux filiales.
+			</p>
+			<dl class="mt-4 flex flex-col self-stretch">
+				<div class="flex flex-wrap justify-between gap-x-4 gap-y-0.5 border-t border-trait-clair py-4">
+					<dt class="text-[13px] font-semibold tracking-[0.12em] text-bronze uppercase">Sénégal</dt>
+					<dd class="text-[17px] font-semibold text-noir"><a href={site.telephoneSenegal.lien}>{site.telephoneSenegal.affichage}</a></dd>
+				</div>
+				<div class="flex flex-wrap justify-between gap-x-4 gap-y-0.5 border-t border-trait-clair py-4">
+					<dt class="text-[13px] font-semibold tracking-[0.12em] text-bronze uppercase">France</dt>
+					<dd class="text-[17px] font-semibold text-noir"><a href={site.telephoneFrance.lien}>{site.telephoneFrance.affichage}</a></dd>
+				</div>
+				<div class="flex flex-wrap justify-between gap-x-4 gap-y-0.5 border-t border-trait-clair py-4">
+					<dt class="text-[13px] font-semibold tracking-[0.12em] text-bronze uppercase">E-mail</dt>
+					<dd class="min-w-0 text-[17px] font-semibold wrap-anywhere text-noir"><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+				</div>
+				<div class="flex flex-wrap justify-between gap-x-4 gap-y-0.5 border-y border-trait-clair py-4">
+					<dt class="text-[13px] font-semibold tracking-[0.12em] text-bronze uppercase">Siège</dt>
+					<dd class="text-[17px] font-semibold text-noir">{site.siege}</dd>
+				</div>
+			</dl>
+		</div>
+
+		<div class="min-w-0 flex-[1.5_1_380px] rounded-[18px] border border-trait-clair bg-white p-[clamp(24px,3.2vw,44px)] shadow-[0_1px_2px_rgba(22,19,15,0.04),0_18px_48px_rgba(22,19,15,0.07)]">
+			<form
+				data-formulaire="contact"
+				action={formulaires.contact}
+				method="post"
+				data-demo={formulaires.demo ? 'true' : undefined}
+				aria-label="Formulaire de contact"
+				class="flex flex-col gap-[18px]"
+			>
+				<div class="grid grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))] gap-[18px]">
+					<div class="flex min-w-0 flex-col gap-1.5">
+						<label for="f-nom" class={libelle}>Nom et prénom</label>
+						<input id="f-nom" name="nom" type="text" autocomplete="name" required class={champ} />
+					</div>
+					<div class="flex min-w-0 flex-col gap-1.5">
+						<label for="f-societe" class={libelle}>Organisation <span class="font-normal text-encre-3">(facultatif)</span></label>
+						<input id="f-societe" name="societe" type="text" autocomplete="organization" class={champ} />
+					</div>
+					<div class="flex min-w-0 flex-col gap-1.5">
+						<label for="f-email" class={libelle}>E-mail</label>
+						<input id="f-email" name="email" type="email" autocomplete="email" required class={champ} />
+					</div>
+					<div class="flex min-w-0 flex-col gap-1.5">
+						<label for="f-tel" class={libelle}>Téléphone <span class="font-normal text-encre-3">(facultatif)</span></label>
+						<input id="f-tel" name="telephone" type="tel" autocomplete="tel" class={champ} />
+					</div>
+				</div>
+
+				<div class="flex min-w-0 flex-col gap-1.5">
+					<label for="f-sujet" class={libelle}>Objet de votre demande</label>
+					<select id="f-sujet" name="sujet" class={champ}>
+						<option value="">Choisir…</option>
+						{sujets.map((option) => <option>{option}</option>)}
+					</select>
+				</div>
+
+				<div class="flex min-w-0 flex-col gap-1.5">
+					<label for="f-message" class={libelle}>Votre message</label>
+					<textarea id="f-message" name="message" rows="5" required class={`${champ} min-h-[140px] resize-y leading-[1.5]`}></textarea>
+				</div>
+
+				{fonctionnalites.newsletter && (
+				<div class="flex items-start gap-3">
+					<input id="f-lettre" name="newsletter" type="checkbox" value="oui" class="mt-px size-[22px] flex-none accent-noir" />
+					<label for="f-lettre" class="text-[15px] leading-[1.5] text-encre-4">
+						Je souhaite recevoir la newsletter de <span class="whitespace-nowrap">La Franco-Sénégalaise</span> (désinscription en un clic).
+					</label>
+				</div>
+				)}
+
+				{/* Champ piège : invisible pour les visiteurs, souvent rempli par les robots. */}
+				<div aria-hidden="true" class="absolute -left-[9999px] h-px w-px overflow-hidden">
+					<label for="f-site">Ne pas remplir</label>
+					<input id="f-site" name="site_web" type="text" tabindex="-1" autocomplete="off" />
+				</div>
+
+				{formulaires.turnstileSiteKey && <div data-turnstile data-sitekey={formulaires.turnstileSiteKey}></div>}
+
+				<div class="flex flex-wrap items-center gap-x-5 gap-y-3">
+					<button
+						type="submit"
+						class="effet-bouton inline-flex min-h-[54px] cursor-pointer items-center justify-center gap-2.5 rounded-[10px] bg-noir px-[26px] text-[16px] leading-[1.2] font-semibold text-creme disabled:cursor-wait disabled:opacity-70"
+					>
+						<span data-libelle-envoi>Envoyer</span><Icone nom="fleche" class="size-[18px]" />
+					</button>
+				</div>
+				<p data-erreur hidden role="alert" class="text-[15px] leading-[1.5] text-[#b3261e]">
+					L’envoi n’a pas abouti. Réessayez dans un instant, ou écrivez-nous à <a href={`mailto:${site.email}`} class="underline">{site.email}</a>.
+				</p>
+				<p class="text-[13.5px] leading-[1.5] text-encre-3">
+					Vos données servent uniquement à traiter votre demande et, si vous l’avez choisi, à vous envoyer la newsletter. <a href="/confidentialite" class="text-bronze underline">Politique de confidentialité</a>
+				</p>
+			</form>
+
+			<div data-merci="contact" hidden role="status" class="flex flex-col items-start gap-3.5 py-3">
+				<span aria-hidden="true" class="flex size-[52px] items-center justify-center rounded-full bg-[#dceee3] text-[#006838]">
+					<Icone nom="coche" epaisseur={2} class="size-6" />
+				</span>
+				<p class="font-titre text-[28px] leading-[1.15] font-semibold tracking-[-0.02em] text-noir">Merci, votre message est bien parti.</p>
+				<p class="text-[16px] leading-[1.6] text-encre-2">Nous vous répondons à l’adresse indiquée.</p>
+				<button
+					type="button"
+					data-nouvelle-demande
+					class="min-h-11 cursor-pointer p-0 text-[15px] font-semibold text-noir underline decoration-ambre underline-offset-4"
+				>Envoyer un autre message</button>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	import '../scripts/formulaires.ts';
+</script>

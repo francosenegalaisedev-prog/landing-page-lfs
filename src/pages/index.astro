@@ -1,0 +1,54 @@
+---
+import BandeauMarques from '../components/BandeauMarques.astro';
+import Carrieres from '../components/Carrieres.astro';
+import Contact from '../components/Contact.astro';
+import Conviction from '../components/Conviction.astro';
+import EnTete from '../components/EnTete.astro';
+import Groupe from '../components/Groupe.astro';
+import Ouverture from '../components/Ouverture.astro';
+import Phygital from '../components/Phygital.astro';
+import PiedDePage from '../components/PiedDePage.astro';
+import Poles from '../components/Poles.astro';
+import Projets from '../components/Projets.astro';
+import { site } from '../config';
+import { poles } from '../data/poles';
+import Layout from '../layouts/Layout.astro';
+
+const base = Astro.site ?? new URL('https://lafrancosenegalaise.com');
+
+/** Fiche « Organization » pour les moteurs de recherche. */
+const donneesStructurees = {
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	name: site.nom,
+	url: base.href,
+	logo: new URL('/apple-touch-icon.png', base).href,
+	email: site.email,
+	telephone: '+221339994111',
+	address: { '@type': 'PostalAddress', addressLocality: 'Saly', addressCountry: 'SN' },
+	subOrganization: ['YÉEG', 'Support Connecté', 'Nëkk', 'Teranga Immobilier'].map((nom) => ({ '@type': 'Organization', name: nom })),
+	makesOffer: poles.map((pole) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: pole.surtitre } })),
+};
+---
+
+<Layout titre={site.titre} description={site.description} donneesStructurees={donneesStructurees}>
+	<a
+		href="#contenu"
+		class="absolute -top-20 left-4 z-[60] rounded-[10px] bg-ambre px-[18px] py-3 font-semibold text-noir focus:top-4"
+	>Aller au contenu</a>
+	<div id="haut">
+		<EnTete />
+		<main id="contenu">
+			<Ouverture />
+			<BandeauMarques />
+			<Phygital />
+			<Conviction />
+			<Groupe />
+			<Projets />
+			<Poles />
+			<Carrieres />
+			<Contact />
+		</main>
+		<PiedDePage />
+	</div>
+</Layout>

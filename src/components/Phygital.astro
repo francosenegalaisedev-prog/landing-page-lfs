@@ -1,0 +1,80 @@
+---
+import { Image } from 'astro:assets';
+import logoNom from '../assets/logo/la-franco-senegalaise-nom.png';
+---
+
+<section id="phygital" aria-labelledby="t-phygital" class="gouttiere section-y border-b border-trait-clair bg-creme text-noir">
+	<div class="mx-auto max-w-page">
+		<div class="flex flex-wrap items-stretch overflow-hidden rounded-[22px] border border-trait-clair bg-white">
+			<div class="fond-points flex min-w-0 flex-[1_1_340px] items-center justify-center bg-noir px-[clamp(20px,3vw,44px)] py-[clamp(32px,3.6vw,52px)]">
+				<div
+					role="img"
+					aria-label="Le soleil orange du physique rejoint le cercle rayé du digital : dès qu’ils se touchent, ils fusionnent pour former le phygital et le logo de La Franco-Sénégalaise."
+					class="@container relative mx-auto aspect-4/3 w-full max-w-[420px]"
+				>
+					<div
+						aria-hidden="true"
+						class="lf-f-anim lf-f-halo absolute top-0 left-[14cqi] size-[72cqi] rounded-full bg-[radial-gradient(circle,rgba(248,160,11,0.24)_0%,rgba(248,160,11,0.09)_42%,rgba(248,160,11,0)_70%)] opacity-60"
+					></div>
+					<span
+						aria-hidden="true"
+						class="lf-f-anim lf-f-mot-phy absolute top-[1cqi] left-[50cqi] font-titre text-[max(11px,2.9cqi)] leading-none font-semibold tracking-[0.16em] whitespace-nowrap text-miel"
+					>PHYSIQUE</span>
+					<span
+						aria-hidden="true"
+						class="lf-f-anim lf-f-mot-dig absolute top-[1cqi] left-[50cqi] font-titre text-[max(11px,2.9cqi)] leading-none font-semibold tracking-[0.16em] whitespace-nowrap text-communication"
+					>DIGITAL</span>
+					<span
+						aria-hidden="true"
+						class="lf-f-anim lf-f-mot-fusion absolute top-[1cqi] left-[50cqi] font-titre text-[max(11px,2.9cqi)] leading-none font-semibold tracking-[0.16em] whitespace-nowrap text-ambre"
+					>PHYGITAL</span>
+					<div aria-hidden="true" class="lf-f-anim lf-f-phy absolute top-[13cqi] left-[27cqi] size-[46cqi] rounded-full"></div>
+					<div aria-hidden="true" class="lf-f-anim lf-f-dig absolute top-[13cqi] left-[27cqi] size-[46cqi] rounded-full"></div>
+					<div aria-hidden="true" class="lf-f-anim lf-f-clip-phy absolute inset-0">
+						<div class="lf-f-anim lf-f-clip-dig absolute inset-0">
+							<div class="lf-f-anim lf-f-voile absolute top-[13cqi] left-[27cqi] size-[46cqi] rounded-full bg-noir"></div>
+							<div class="lf-f-intersection absolute top-[13cqi] left-[27cqi] size-[46cqi] rounded-full"></div>
+						</div>
+					</div>
+					<Image
+						src={logoNom}
+						alt=""
+						aria-hidden="true"
+						class="lf-f-anim lf-f-nom absolute top-[66cqi] left-[18cqi] block h-auto w-[64cqi]"
+					/>
+				</div>
+			</div>
+
+			<div class="flex min-w-0 flex-[1_1_360px] flex-col items-start justify-center gap-4 p-[clamp(28px,3.6vw,52px)]">
+				<p class="text-[12.5px] font-semibold tracking-[0.14em] text-bronze uppercase">Le phygital</p>
+				<h2
+					id="t-phygital"
+					class="font-titre text-[clamp(28px,2.8vw,40px)] leading-[1.1] font-semibold tracking-[-0.02em] text-balance text-noir"
+				>
+					Là où le physique rencontre le digital, <em class="accent tracking-normal text-bronze">naît <span class="whitespace-nowrap">La Franco-Sénégalaise.</span></em>
+				</h2>
+				<p class="text-[17px] leading-[1.6] text-pretty text-encre-2">
+					Le phygital fusionne l’expérience physique et l’expérience digitale pour créer des points de contact mémorables. C’est à cette intersection que nous nous situons, et c’est là que notre logo prend forme.
+				</p>
+				<ul aria-label="Exemples de dispositifs phygitaux" class="flex flex-col gap-2.5">
+					<li class="flex items-start gap-3 text-[16px] leading-[1.5] text-encre-2">
+						<span aria-hidden="true" class="mt-2 block size-2 flex-none rounded-full bg-ambre"></span>
+						<span><strong class="font-semibold text-noir">Supports connectés</strong>&nbsp;: une carte ou un sticker qui ouvre une page en ligne</span>
+					</li>
+					<li class="flex items-start gap-3 text-[16px] leading-[1.5] text-encre-2">
+						<span aria-hidden="true" class="mt-2 block size-2 flex-none rounded-full bg-ambre"></span>
+						<span>Bornes et écrans interactifs</span>
+					</li>
+					<li class="flex items-start gap-3 text-[16px] leading-[1.5] text-encre-2">
+						<span aria-hidden="true" class="mt-2 block size-2 flex-none rounded-full bg-ambre"></span>
+						<span>Expériences immersives et scénographie connectée</span>
+					</li>
+					<li class="flex items-start gap-3 text-[16px] leading-[1.5] text-encre-2">
+						<span aria-hidden="true" class="mt-2 block size-2 flex-none rounded-full bg-ambre"></span>
+						<span>Stands et espaces de marque augmentés</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,27 @@
+---
+import Icone from './Icone.astro';
+---
+
+<section id="carrieres" aria-labelledby="t-carrieres" class="gouttiere bg-ambre py-[clamp(48px,5vw,72px)] text-noir">
+	<div class="mx-auto flex max-w-page flex-wrap items-center justify-between gap-x-12 gap-y-6">
+		<div class="flex min-w-0 flex-[1_1_520px] flex-col items-start gap-3">
+			<p class="inline-flex items-center gap-2.5 text-[13px] font-semibold tracking-[0.16em] text-noir uppercase">
+				<span aria-hidden="true" class="block h-px w-7 bg-noir"></span>Carrières
+			</p>
+			<h2
+				id="t-carrieres"
+				class="font-titre text-[clamp(30px,3.6vw,48px)] leading-[1.05] font-bold tracking-[-0.03em] text-balance text-noir"
+			>
+				Grandir avec <em class="accent tracking-normal text-noir">le&nbsp;groupe.</em>
+			</h2>
+			<p class="max-w-[600px] text-[18px] leading-[1.6] text-pretty text-noir">
+				Rejoindre <span class="whitespace-nowrap">La Franco-Sénégalaise</span>, c’est travailler au contact de plusieurs filiales et pouvoir évoluer de l’une à l’autre.
+			</p>
+		</div>
+		<a
+			href="#contact"
+			data-sujet-contact="Candidature spontanée"
+			class="effet-bouton inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-[10px] bg-noir px-[26px] text-[16px] leading-[1.2] font-semibold text-creme"
+		>Candidature spontanée<Icone nom="fleche" class="size-[18px]" /></a>
+	</div>
+</section>

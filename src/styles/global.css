@@ -1,0 +1,378 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Charte de La Franco-Sénégalaise (couleurs tirées du logo officiel)
+   Utilisation : bg-noir, text-creme, border-trait-1, text-ambre, font-titre…
+   ------------------------------------------------------------------ */
+@theme {
+	--font-sans: 'Inter', Arial, sans-serif;
+	--font-titre: 'Inter Tight', 'Inter', Arial, sans-serif;
+	--font-accent: 'Cormorant Garamond', Georgia, serif;
+
+	/* Couleurs du logo */
+	--color-noir: #16130f;
+	--color-creme: #f6f1e8;
+	--color-ambre: #f8a00b;
+	--color-ambre-fonce: #d98a00;
+	--color-miel: #fbbf5a;
+	--color-sable: #fcdda4;
+	--color-bronze: #8c4f00;
+
+	/* Sur fond sombre : textes secondaires, traits, surfaces */
+	--color-texte-2: #d9d1c4;
+	--color-texte-3: #bdb3a3;
+	--color-texte-4: #9a8f7f;
+	--color-trait-1: #2c2620;
+	--color-trait-2: #3a332a;
+	--color-trait-3: #4a4239;
+	--color-trait-4: #5a5045;
+	--color-surface-1: #1c1814;
+	--color-surface-2: #1a1713;
+	--color-surface-3: #1e1a16;
+
+	/* Sur fond clair : textes, traits, champs de formulaire */
+	--color-encre-2: #4a433a;
+	--color-encre-3: #5e564b;
+	--color-encre-4: #26221c;
+	--color-trait-clair: #e4dacb;
+	--color-champ: #8c8273;
+
+	/* Une couleur par pôle (sur fond sombre / sur fond clair) */
+	--color-informatique: #3ccb7f;
+	--color-informatique-clair: #0b7a4b;
+	--color-communication: #d8be8e;
+	--color-communication-clair: #8a6420;
+	--color-marketing: #f07467;
+	--color-marketing-clair: #b3261e;
+	--color-audiovisuel: #f8c818;
+	--color-audiovisuel-clair: #7a5c00;
+	--color-impression: #e8875a;
+	--color-impression-clair: #a34a22;
+
+	/* Largeur de contenu : max-w-page */
+	--container-page: 75rem;
+
+	/* Bandeau des filiales */
+	--animate-defile: defile 80s linear infinite;
+	@keyframes defile {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-50%);
+		}
+	}
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+	:where(a, button, input, select, textarea):focus-visible {
+		outline: 2px solid var(--color-ambre);
+		outline-offset: 3px;
+	}
+	/* L'en-tête est collant : les ancres s'arrêtent juste dessous */
+	section[id],
+	article[id],
+	div[id='methode'],
+	div[id='newsletter'] {
+		scroll-margin-top: 84px;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+	}
+
+	/* Couleur d'un pôle, posée par data-pole="…" et lue par text-(--pole), border-(--pole-trait)… */
+	[data-pole] {
+		--pole-fond: color-mix(in srgb, var(--pole) 14%, transparent);
+		--pole-trait: color-mix(in srgb, var(--pole) 35%, transparent);
+	}
+	[data-pole='informatique'] {
+		--pole: var(--color-informatique);
+		--pole-clair: var(--color-informatique-clair);
+	}
+	[data-pole='communication'] {
+		--pole: var(--color-communication);
+		--pole-clair: var(--color-communication-clair);
+	}
+	[data-pole='marketing'] {
+		--pole: var(--color-marketing);
+		--pole-clair: var(--color-marketing-clair);
+	}
+	[data-pole='audiovisuel'] {
+		--pole: var(--color-audiovisuel);
+		--pole-clair: var(--color-audiovisuel-clair);
+	}
+	[data-pole='impression'] {
+		--pole: var(--color-impression);
+		--pole-clair: var(--color-impression-clair);
+	}
+}
+
+/* ------------------------------------------------------------------
+   Utilitaires propres au site
+   ------------------------------------------------------------------ */
+@utility gouttiere {
+	padding-inline: clamp(20px, 5vw, 64px);
+}
+@utility section-y {
+	padding-block: clamp(64px, 7vw, 104px);
+}
+@utility fond-points {
+	background-image: radial-gradient(rgb(246 241 232 / 0.05) 1px, transparent 1px);
+	background-size: 26px 26px;
+}
+/* Mots en italique de la charte (Cormorant Garamond) */
+@utility accent {
+	font-family: var(--font-accent);
+	font-size: 1.1em;
+	font-style: italic;
+	font-weight: 500;
+}
+@utility titre-section {
+	font-family: var(--font-titre);
+	font-size: clamp(34px, 4.6vw, 62px);
+	font-weight: 700;
+	line-height: 1.04;
+	letter-spacing: -0.03em;
+	text-wrap: balance;
+}
+/* Petit titre au-dessus des sections, précédé d'un trait ambre */
+@utility surtitre {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	&::before {
+		content: '';
+		display: block;
+		width: 28px;
+		height: 1px;
+		background-color: var(--color-ambre);
+	}
+}
+@utility effet-bouton {
+	transition:
+		transform 0.2s ease,
+		filter 0.2s ease;
+	&:hover {
+		transform: translateY(-1px);
+		filter: brightness(1.06);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+		&:hover {
+			transform: none;
+		}
+	}
+}
+@utility effet-carte {
+	transition:
+		transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+		box-shadow 0.35s ease;
+	&:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 18px 40px rgb(22 19 15 / 0.14);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+		&:hover {
+			transform: none;
+		}
+	}
+}
+
+/* ------------------------------------------------------------------
+   Ouverture & Phygital : le soleil du logo et l'animation de fusion
+   ------------------------------------------------------------------ */
+@layer components {
+	:root {
+		--degrade-soleil: linear-gradient(180deg, #F8A00B 0%, #F8A517 13%, #F9AC28 25%, #F9B43D 36%, #FABE58 47%, #FBC870 56%, #FCD187 64%, #FCD38C 72%, rgba(252,211,140,0.75) 81%, rgba(252,211,140,0.32) 89%, rgba(252,211,140,0.12) 95%, rgba(252,211,140,0) 100%);
+		--masque-soleil: linear-gradient(180deg, #000 0%, #000 3.39%, transparent 3.39%, transparent 4.00%, #000 4.00%, #000 6.87%, transparent 6.87%, transparent 7.43%, #000 7.43%, #000 10.17%, transparent 10.17%, transparent 10.75%, #000 10.75%, #000 13.48%, transparent 13.48%, transparent 13.99%, #000 13.99%, #000 16.53%, transparent 16.53%, transparent 17.16%, #000 17.16%, #000 20.62%, transparent 20.62%, transparent 21.19%, #000 21.19%, #000 24.03%, transparent 24.03%, transparent 24.60%, #000 24.60%, #000 27.03%, transparent 27.03%, transparent 27.63%, #000 27.63%, #000 30.08%, transparent 30.08%, transparent 30.67%, #000 30.67%, #000 33.49%, transparent 33.49%, transparent 34.16%, #000 34.16%, #000 37.30%, transparent 37.30%, transparent 37.94%, #000 37.94%, #000 41.05%, transparent 41.05%, transparent 41.70%, #000 41.70%, #000 44.71%, transparent 44.71%, transparent 45.39%, #000 45.39%, #000 48.63%, transparent 48.63%, transparent 49.22%, #000 49.22%, #000 52.28%, transparent 52.28%, transparent 52.80%, #000 52.80%, #000 56.22%, transparent 56.22%, transparent 56.84%, #000 56.84%, #000 60.66%, transparent 60.66%, transparent 61.27%, #000 61.27%, #000 65.44%, transparent 65.44%, transparent 66.07%, #000 66.07%, #000 69.33%, transparent 69.33%, transparent 69.99%, #000 69.99%, #000 73.80%, transparent 73.80%, transparent 74.44%, #000 74.44%, #000 78.14%, transparent 78.14%, transparent 78.78%, #000 78.78%, #000 82.44%, transparent 82.44%, transparent 83.24%, #000 83.24%, #000 86.86%, transparent 86.86%, transparent 87.52%, #000 87.52%, #000 91.47%, transparent 91.47%, transparent 92.13%, #000 92.13%, #000 100%);
+	}
+
+	.ouverture {
+		--soleil: clamp(220px, 28vw, 400px);
+		padding-bottom: calc(var(--soleil) / 2 + clamp(36px, 3.2vw, 48px));
+		background-color: var(--color-noir);
+		background-image:
+			radial-gradient(ellipse 60% 55% at 50% 100%, rgb(248 160 11 / 0.14), rgb(248 160 11 / 0) 70%),
+			radial-gradient(rgb(246 241 232 / 0.06) 1px, transparent 1px);
+		background-size:
+			auto,
+			26px 26px;
+	}
+
+	/* Disque ambre dont l'opacité décroît vers le bas, coupé de fines lignes (comme le logo) */
+	.soleil {
+		position: absolute;
+		left: 50%;
+		bottom: calc(var(--soleil) / -2);
+		width: var(--soleil);
+		height: var(--soleil);
+		transform: translateX(-50%);
+		border-radius: 50%;
+		background: var(--degrade-soleil);
+		-webkit-mask-image: var(--masque-soleil);
+		mask-image: var(--masque-soleil);
+	}
+
+	/* Animation de la section Phygital : le soleil du physique (à gauche) rejoint le cercle rayé du digital (à droite) */
+	.lf-f-halo {
+		animation: lf-f-halo 10s ease-in-out infinite;
+	}
+	.lf-f-mot-phy {
+		transform: translate(-50%, 0) translateX(-25cqi);
+		animation: lf-f-mot-phy 10s ease-in-out infinite;
+	}
+	.lf-f-mot-dig {
+		transform: translate(-50%, 0) translateX(25cqi);
+		animation: lf-f-mot-dig 10s ease-in-out infinite;
+	}
+	.lf-f-mot-fusion {
+		transform: translate(-50%, 0) scale(0.92);
+		opacity: 0;
+		animation: lf-f-mot-fusion 10s ease-in-out infinite;
+	}
+	.lf-f-phy {
+		border: 1px solid rgba(248, 160, 11, 0.6);
+		background-image: var(--degrade-soleil);
+		transform: translateX(-11.5cqi);
+		animation: lf-f-phy 10s ease-in-out infinite;
+	}
+	.lf-f-dig {
+		border: 1px solid rgba(216, 190, 142, 0.6);
+		background-image: linear-gradient(180deg, rgba(216,190,142,0.5) 0%, rgba(216,190,142,0.5) 3.39%, transparent 3.39%, transparent 4.00%, rgba(216,190,142,0.5) 4.00%, rgba(216,190,142,0.5) 6.87%, transparent 6.87%, transparent 7.43%, rgba(216,190,142,0.5) 7.43%, rgba(216,190,142,0.5) 10.17%, transparent 10.17%, transparent 10.75%, rgba(216,190,142,0.5) 10.75%, rgba(216,190,142,0.5) 13.48%, transparent 13.48%, transparent 13.99%, rgba(216,190,142,0.5) 13.99%, rgba(216,190,142,0.5) 16.53%, transparent 16.53%, transparent 17.16%, rgba(216,190,142,0.5) 17.16%, rgba(216,190,142,0.5) 20.62%, transparent 20.62%, transparent 21.19%, rgba(216,190,142,0.5) 21.19%, rgba(216,190,142,0.5) 24.03%, transparent 24.03%, transparent 24.60%, rgba(216,190,142,0.5) 24.60%, rgba(216,190,142,0.5) 27.03%, transparent 27.03%, transparent 27.63%, rgba(216,190,142,0.5) 27.63%, rgba(216,190,142,0.5) 30.08%, transparent 30.08%, transparent 30.67%, rgba(216,190,142,0.5) 30.67%, rgba(216,190,142,0.5) 33.49%, transparent 33.49%, transparent 34.16%, rgba(216,190,142,0.5) 34.16%, rgba(216,190,142,0.5) 37.30%, transparent 37.30%, transparent 37.94%, rgba(216,190,142,0.5) 37.94%, rgba(216,190,142,0.5) 41.05%, transparent 41.05%, transparent 41.70%, rgba(216,190,142,0.5) 41.70%, rgba(216,190,142,0.5) 44.71%, transparent 44.71%, transparent 45.39%, rgba(216,190,142,0.5) 45.39%, rgba(216,190,142,0.5) 48.63%, transparent 48.63%, transparent 49.22%, rgba(216,190,142,0.5) 49.22%, rgba(216,190,142,0.5) 52.28%, transparent 52.28%, transparent 52.80%, rgba(216,190,142,0.5) 52.80%, rgba(216,190,142,0.5) 56.22%, transparent 56.22%, transparent 56.84%, rgba(216,190,142,0.5) 56.84%, rgba(216,190,142,0.5) 60.66%, transparent 60.66%, transparent 61.27%, rgba(216,190,142,0.5) 61.27%, rgba(216,190,142,0.5) 65.44%, transparent 65.44%, transparent 66.07%, rgba(216,190,142,0.5) 66.07%, rgba(216,190,142,0.5) 69.33%, transparent 69.33%, transparent 69.99%, rgba(216,190,142,0.5) 69.99%, rgba(216,190,142,0.5) 73.80%, transparent 73.80%, transparent 74.44%, rgba(216,190,142,0.5) 74.44%, rgba(216,190,142,0.5) 78.14%, transparent 78.14%, transparent 78.78%, rgba(216,190,142,0.5) 78.78%, rgba(216,190,142,0.5) 82.44%, transparent 82.44%, transparent 83.24%, rgba(216,190,142,0.5) 83.24%, rgba(216,190,142,0.5) 86.86%, transparent 86.86%, transparent 87.52%, rgba(216,190,142,0.5) 87.52%, rgba(216,190,142,0.5) 91.47%, transparent 91.47%, transparent 92.13%, rgba(216,190,142,0.5) 92.13%, rgba(216,190,142,0.5) 100%);
+		transform: translateX(11.5cqi);
+		animation: lf-f-dig 10s ease-in-out infinite;
+	}
+	.lf-f-clip-phy {
+		clip-path: circle(23cqi at 38.5cqi 36cqi);
+		animation: lf-f-clip-phy 10s ease-in-out infinite;
+	}
+	.lf-f-clip-dig {
+		clip-path: circle(23cqi at 61.5cqi 36cqi);
+		animation: lf-f-clip-dig 10s ease-in-out infinite;
+	}
+	.lf-f-voile {
+		animation: lf-f-voile 10s ease-in-out infinite;
+	}
+	.lf-f-intersection {
+		background: var(--degrade-soleil);
+		-webkit-mask-image: var(--masque-soleil);
+		mask-image: var(--masque-soleil);
+	}
+	.lf-f-nom {
+		animation: lf-f-nom 10s ease-in-out infinite;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.lf-f-anim {
+			animation: none !important;
+		}
+	}
+}
+
+@keyframes lf-f-voile {
+	0%, 36% { opacity: 1; }
+	46%, 84% { opacity: 0; }
+	92%, 100% { opacity: 1; }
+}
+@keyframes lf-f-mot-phy {
+	0%, 10% { transform: translate(-50%, 0) translateX(-25cqi); opacity: 1; }
+	34% { transform: translate(-50%, 0) translateX(-9cqi); opacity: 1; }
+	40%, 86% { transform: translate(-50%, 0) translateX(0); opacity: 0; }
+	90% { transform: translate(-50%, 0) translateX(-9cqi); opacity: 1; }
+	100% { transform: translate(-50%, 0) translateX(-25cqi); opacity: 1; }
+}
+@keyframes lf-f-mot-dig {
+	0%, 10% { transform: translate(-50%, 0) translateX(25cqi); opacity: 1; }
+	34% { transform: translate(-50%, 0) translateX(9cqi); opacity: 1; }
+	40%, 86% { transform: translate(-50%, 0) translateX(0); opacity: 0; }
+	90% { transform: translate(-50%, 0) translateX(9cqi); opacity: 1; }
+	100% { transform: translate(-50%, 0) translateX(25cqi); opacity: 1; }
+}
+@keyframes lf-f-mot-fusion {
+	0%, 34% { transform: translate(-50%, 0) scale(0.92); opacity: 0; }
+	42%, 84% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+	90%, 100% { transform: translate(-50%, 0) scale(0.92); opacity: 0; }
+}
+@keyframes lf-f-phy {
+	0%, 10% { transform: translateX(-25cqi); opacity: 1; }
+	36% { opacity: 1; }
+	42% { transform: translateX(0); }
+	46%, 84% { transform: translateX(0); opacity: 0; }
+	92% { opacity: 1; }
+	100% { transform: translateX(-25cqi); opacity: 1; }
+}
+@keyframes lf-f-dig {
+	0%, 10% { transform: translateX(25cqi); opacity: 1; }
+	36% { opacity: 1; }
+	42% { transform: translateX(0); }
+	46%, 84% { transform: translateX(0); opacity: 0; }
+	92% { opacity: 1; }
+	100% { transform: translateX(25cqi); opacity: 1; }
+}
+@keyframes lf-f-clip-phy {
+	0%, 10% { clip-path: circle(23cqi at 25cqi 36cqi); }
+	42%, 84% { clip-path: circle(23cqi at 50cqi 36cqi); }
+	100% { clip-path: circle(23cqi at 25cqi 36cqi); }
+}
+@keyframes lf-f-clip-dig {
+	0%, 10% { clip-path: circle(23cqi at 75cqi 36cqi); }
+	42%, 84% { clip-path: circle(23cqi at 50cqi 36cqi); }
+	100% { clip-path: circle(23cqi at 75cqi 36cqi); }
+}
+@keyframes lf-f-halo {
+	0%, 10% { opacity: 0; }
+	42%, 84% { opacity: 1; }
+	100% { opacity: 0; }
+}
+@keyframes lf-f-nom {
+	0%, 44% { opacity: 0; transform: translateY(1.5cqi); }
+	52%, 84% { opacity: 1; transform: translateY(0); }
+	90%, 100% { opacity: 0; transform: translateY(1.5cqi); }
+}
+
+/* ------------------------------------------------------------------
+   Pages de texte (mentions légales, confidentialité)
+   ------------------------------------------------------------------ */
+@layer components {
+	.texte-legal h2 {
+		margin-top: 2.25rem;
+		margin-bottom: 0.75rem;
+		font-family: var(--font-titre);
+		font-size: 22px;
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: -0.01em;
+		color: var(--color-creme);
+	}
+	.texte-legal p,
+	.texte-legal li {
+		font-size: 16.5px;
+		line-height: 1.7;
+		color: var(--color-texte-2);
+	}
+	.texte-legal ul {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding-left: 1.25rem;
+		list-style: disc;
+	}
+	.texte-legal a {
+		color: var(--color-miel);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.texte-legal a:hover {
+		color: var(--color-creme);
+	}
+}

@@ -1,0 +1,28 @@
+---
+import Icone from './Icone.astro';
+---
+
+<section aria-labelledby="t-hero" class="ouverture gouttiere relative pt-[clamp(48px,4.8vw,72px)]">
+	<div aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
+		<div class="soleil"></div>
+	</div>
+
+	<div class="relative z-[1] mx-auto flex max-w-[960px] flex-col items-center gap-6 text-center">
+		<h1 id="t-hero" class="font-titre text-[clamp(40px,5.3vw,76px)] leading-[1.02] font-bold tracking-[-0.035em] text-creme">
+			Une maison mère,<br /> du pixel<br /> <em class="accent tracking-[-0.01em] text-ambre">à&nbsp;l’espace physique.</em>
+		</h1>
+		<p class="max-w-[720px] text-[clamp(17px,1.4vw,20px)] leading-[1.6] text-pretty text-texte-2">
+			<span class="whitespace-nowrap">La Franco-Sénégalaise</span> est la maison mère d’un groupe d’entreprises établi au Sénégal. Elle pilote, conseille et accompagne ses filiales, et met à leur service des expertises communes, des outils numériques de dernière génération jusqu’aux supports physiques.
+		</p>
+		<div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-3">
+			<a
+				href="#filiales"
+				class="effet-bouton inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-[10px] bg-ambre px-[26px] text-[16px] leading-[1.2] font-semibold text-noir"
+			>Découvrir nos filiales<Icone nom="fleche" class="size-[18px]" /></a>
+			<a
+				href="#groupe"
+				class="effet-bouton inline-flex min-h-[54px] items-center justify-center rounded-[10px] border border-trait-3 px-6 text-[16px] leading-[1.2] font-semibold text-creme"
+			>Le groupe</a>
+		</div>
+	</div>
+</section>

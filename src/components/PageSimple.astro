@@ -1,0 +1,31 @@
+---
+/** Gabarit des pages de texte (mentions légales, confidentialité). */
+import logo from '../assets/logo/la-franco-senegalaise-horizontal.png';
+import Icone from './Icone.astro';
+
+interface Props {
+	titre: string;
+}
+
+const { titre } = Astro.props;
+---
+
+<div class="min-h-screen bg-noir text-creme">
+	<div aria-hidden="true" class="h-[3px] bg-ambre"></div>
+	<header class="gouttiere border-b border-trait-1 py-3">
+		<div class="mx-auto flex max-w-page flex-wrap items-center justify-between gap-4">
+			<a href="/" class="flex flex-none">
+				<img src={logo.src} width={logo.width} height={logo.height} alt="La Franco-Sénégalaise, retour à l’accueil" class="block h-[clamp(24px,2.6vw,36px)] w-auto" />
+			</a>
+			<a href="/" class="inline-flex min-h-11 items-center gap-2 text-[15px] font-medium text-texte-2 hover:text-creme">
+				<Icone nom="fleche" class="size-4 rotate-180" />Retour à l’accueil
+			</a>
+		</div>
+	</header>
+	<main class="gouttiere section-y fond-points">
+		<article class="texte-legal mx-auto max-w-[760px]">
+			<h1 class="titre-section mb-10 text-creme">{titre}</h1>
+			<slot />
+		</article>
+	</main>
+</div>

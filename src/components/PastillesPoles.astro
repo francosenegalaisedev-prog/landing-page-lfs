@@ -1,0 +1,37 @@
+---
+/**
+ * Pastilles « Pôles » d'une carte filiale ou projet. Chaque pastille ouvre l'onglet du pôle
+ * (data-voir-pole, géré par scripts/poles.ts) et fait défiler jusqu'à #expertises.
+ */
+import { nomDuPole, type PoleId } from '../data/poles';
+import type { ThemeCarte } from '../types';
+
+interface Props {
+	poles: PoleId[];
+	theme: ThemeCarte;
+	/** Cale la rangée en bas de la carte. */
+	enBas?: boolean;
+}
+
+const { poles, theme, enBas = false } = Astro.props;
+
+const styles = {
+	noir: { libelle: 'text-[#9a9a9a]', pastille: 'border-[#3d3d3d] text-white', point: 'bg-(--pole)' },
+	blanc: { libelle: 'text-encre-3', pastille: 'border-trait-clair text-encre-4', point: 'bg-(--pole-clair)' },
+	teranga: { libelle: 'text-[#a9c8be]', pastille: 'border-[#3e6b60] text-white', point: 'bg-(--pole)' },
+	musee: { libelle: 'text-[#c9a9a0]', pastille: 'border-[#5a3335] text-creme', point: 'bg-(--pole)' },
+}[theme];
+---
+
+<div class={`flex flex-wrap items-center gap-x-2 ${enBas ? 'mt-auto' : ''}`}>
+	<span class={`mr-1 text-[12px] font-semibold tracking-[0.12em] uppercase ${styles.libelle}`}>Pôles</span>
+	{poles.map((id) => (
+		<a href="#expertises" data-voir-pole={id} data-pole={id} class="group inline-flex min-h-11 items-center">
+			<span
+				class={`inline-flex items-center gap-[7px] rounded-full border px-3 py-1.5 text-[13.5px] leading-[1.2] font-semibold transition-colors duration-200 group-hover:border-current ${styles.pastille}`}
+			>
+				<span aria-hidden="true" class={`block size-[7px] flex-none rounded-full ${styles.point}`}></span>{nomDuPole(id)}
+			</span>
+		</a>
+	))}
+</div>
