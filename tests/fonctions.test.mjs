@@ -8,12 +8,12 @@ import assert from 'node:assert/strict';
 import { registerHooks } from 'node:module';
 import { afterEach, describe, test } from 'node:test';
 
-// Les fonctions importent « ../lib/brevo » sans extension ; Node résout vers « .ts ».
+// Les fonctions importent « ../lib/brevo.js » (requis par Node ESM sur Vercel) ; en test Node résout vers « .ts ».
 registerHooks({
 	resolve(specifier, contexte, suivant) {
-		if ((specifier.startsWith('./') || specifier.startsWith('../')) && !/\.[cm]?[jt]s$/.test(specifier)) {
+		if ((specifier.startsWith('./') || specifier.startsWith('../')) && (!/\.[cm]?[jt]s$/.test(specifier) || specifier.endsWith('.js'))) {
 			try {
-				return suivant(`${specifier}.ts`, contexte);
+				return suivant(`${specifier.replace(/\.js$/, '')}.ts`, contexte);
 			} catch {
 				// on retombe sur la résolution normale
 			}

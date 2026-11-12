@@ -24,7 +24,7 @@ import {
 	lireDonnees,
 	nettoyerPourJournal,
 	surUneLigne,
-} from '../lib/brevo';
+} from '../lib/brevo.js';
 
 declare const process: { env: Record<string, string | undefined> };
 

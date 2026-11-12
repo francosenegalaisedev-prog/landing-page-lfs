@@ -10,7 +10,7 @@
  * Les échecs sont écrits dans les journaux Vercel (statut et message de Brevo, jamais la clé ni
  * l'adresse du visiteur). Un contact déjà présent dans Brevo est traité comme une réussite.
  */
-import { EMAIL_VALIDE, decrireErreur, inscrireNewsletter, lireDonnees } from '../lib/brevo';
+import { EMAIL_VALIDE, decrireErreur, inscrireNewsletter, lireDonnees } from '../lib/brevo.js';
 
 function repondre(request: Request, ok: boolean, status = 200): Response {
 	if ((request.headers.get('accept') ?? '').includes('application/json')) {
