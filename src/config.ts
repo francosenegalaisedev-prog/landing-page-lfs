@@ -10,7 +10,7 @@ export const site = {
 	siege: 'Saly, Sénégal',
 
 	/** Adresse du site de Support Connecté (bouton « Visiter le site web ») : À RENSEIGNER. */
-	supportConnecteUrl: '',
+	supportConnecteUrl: 'https://www.support-connecte.com',
 
 	/** Informations légales du pied de page et de la page Mentions légales. */
 	legal: {
