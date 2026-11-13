@@ -14,11 +14,12 @@ export const site = {
 
 	/** Informations légales du pied de page et de la page Mentions légales. */
 	legal: {
-		raisonSociale: '[Dénomination sociale, forme juridique, capital]',
-		adresse: '[adresse]',
-		ninea: '[à compléter]',
-		rccm: '[à compléter]',
-		directeurPublication: '[à compléter]',
+		raisonSociale: 'La Franco Sénégalaise SAS',
+		capital: '1 000 000 F CFA',
+		adresse: 'Niakh Niakal',
+		ninea: '013488045',
+		rccm: 'SN.MBR.2026.B.4000',
+		directeurPublication: 'William Seidman',
 	},
 
 	titre: 'La Franco-Sénégalaise | Maison mère : du pixel à l’espace physique',

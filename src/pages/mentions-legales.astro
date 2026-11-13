@@ -9,7 +9,8 @@ import Layout from '../layouts/Layout.astro';
 	<PageSimple titre="Mentions légales">
 		<h2>Éditeur du site</h2>
 		<p>
-			{site.nom}, {site.legal.raisonSociale}<br />
+			{site.legal.raisonSociale}, au capital de {site.legal.capital}<br />
+			Nom commercial&nbsp;: {site.nom}<br />
 			Siège&nbsp;: {site.legal.adresse}, Saly, Sénégal<br />
 			NINEA&nbsp;: {site.legal.ninea} · RCCM&nbsp;: {site.legal.rccm}<br />
 			E-mail&nbsp;: <a href={`mailto:${site.email}`}>{site.email}</a> · Téléphone&nbsp;: <a href={site.telephoneSenegal.lien}>{site.telephoneSenegal.affichage}</a>
