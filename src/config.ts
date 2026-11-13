@@ -34,7 +34,7 @@ export const site = {
  * ne sont pas en place (voir README, « Mise en ligne des formulaires »). Passer à true ensuite.
  */
 export const fonctionnalites = {
-	newsletter: true,
+	newsletter: false,
 };
 
 /** Envoi des formulaires : fonctions Vercel du dossier api/. */
