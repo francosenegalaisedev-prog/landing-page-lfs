@@ -113,7 +113,10 @@ const libelle = 'text-[14px] leading-[1.4] font-semibold text-encre-4';
 					L’envoi n’a pas abouti. Réessayez dans un instant, ou écrivez-nous à <a href={`mailto:${site.email}`} class="underline">{site.email}</a>.
 				</p>
 				<p class="text-[13.5px] leading-[1.5] text-encre-3">
-					Vos données servent uniquement à traiter votre demande et, si vous l’avez choisi, à vous envoyer la newsletter. <a href="/confidentialite" class="text-bronze underline">Politique de confidentialité</a>
+					{fonctionnalites.newsletter
+						? 'Vos données servent uniquement à traiter votre demande et, si vous l’avez choisi, à vous envoyer la newsletter.'
+						: 'Vos données servent uniquement à traiter votre demande.'}{' '}
+					<a href="/confidentialite" class="text-bronze underline">Politique de confidentialité</a>
 				</p>
 			</form>
 

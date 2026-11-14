@@ -24,7 +24,7 @@ export const site = {
 
 	titre: 'La Franco-Sénégalaise | Maison mère : du pixel à l’espace physique',
 	description:
-		'La Franco-Sénégalaise est la maison mère d’un groupe d’entreprises établi au Sénégal. Elle pilote, conseille et accompagne ses filiales, des outils numériques de dernière génération jusqu’aux supports physiques.',
+		'La Franco-Sénégalaise : maison mère d’un groupe d’entreprises établi au Sénégal. Communication, marketing, informatique et impression, du digital au physique.',
 } as const;
 
 /**
