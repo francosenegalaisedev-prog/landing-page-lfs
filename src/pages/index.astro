@@ -21,11 +21,17 @@ const donneesStructurees = {
 	'@context': 'https://schema.org',
 	'@type': 'Organization',
 	name: site.nom,
+	legalName: site.legal.raisonSociale,
 	url: base.href,
 	logo: new URL('/apple-touch-icon.png', base).href,
 	email: site.email,
 	telephone: '+221339994111',
-	address: { '@type': 'PostalAddress', addressLocality: 'Saly', addressCountry: 'SN' },
+	address: {
+		'@type': 'PostalAddress',
+		streetAddress: site.legal.adresse,
+		addressLocality: 'Saly',
+		addressCountry: 'SN',
+	},
 	subOrganization: ['YÉEG', 'Support Connecté', 'Nëkk', 'Teranga Immobilier'].map((nom) => ({ '@type': 'Organization', name: nom })),
 	makesOffer: poles.map((pole) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: pole.surtitre } })),
 };
