@@ -1,7 +1,7 @@
 ---
 /* MODÈLE À COMPLÉTER ET À FAIRE VALIDER avant la mise en ligne. */
 import PageSimple from '../components/PageSimple.astro';
-import { fonctionnalites, site } from '../config';
+import { fonctionnalites, formulaires, site } from '../config';
 import Layout from '../layouts/Layout.astro';
 ---
 
@@ -15,7 +15,7 @@ import Layout from '../layouts/Layout.astro';
 >
 	<PageSimple titre="Politique de confidentialité">
 		<h2>Responsable du traitement</h2>
-		<p>{site.nom}, {site.legal.raisonSociale}, {site.legal.adresse}, Saly, Sénégal. Contact&nbsp;: <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+		<p>{site.legal.raisonSociale} (nom commercial&nbsp;: {site.nom}), {site.legal.adresse}, Saly, Sénégal. Contact&nbsp;: <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
 
 		<h2>Données collectées</h2>
 		<ul>
@@ -32,16 +32,17 @@ import Layout from '../layouts/Layout.astro';
 
 		<h2>Prestataires</h2>
 		<p>
-			Le site est hébergé par Vercel. La protection anti-spam du formulaire peut utiliser Cloudflare Turnstile.{' '}
+			Le site est hébergé par Vercel.{' '}
+			{formulaires.turnstileSiteKey && 'La protection anti-spam du formulaire peut utiliser Cloudflare Turnstile. '}
 			{fonctionnalites.newsletter ? 'Les e-mails et la newsletter passent par Brevo.' : 'Les e-mails de contact passent par Brevo.'}{' '}
+			Les demandes sont reçues dans la messagerie de l’entreprise, fournie par LWS (Ligne Web Services), qui gère aussi le nom de domaine.{' '}
 			Les polices de caractères sont chargées depuis Google Fonts.
 		</p>
 
 		<h2>Durée de conservation</h2>
+		{/* À COMPLÉTER : durée de conservation à confirmer par le client */}
 		<p>
-			{fonctionnalites.newsletter
-				? '[À définir\u00a0: durée de conservation des demandes et des inscriptions.]'
-				: '[À définir\u00a0: durée de conservation des demandes.]'}
+			Les demandes envoyées par le formulaire sont conservées le temps nécessaire à leur traitement, sauf obligation légale contraire.
 		</p>
 
 		<h2>Vos droits</h2>
@@ -51,6 +52,8 @@ import Layout from '../layouts/Layout.astro';
 		</p>
 
 		<h2>Cookies</h2>
-		<p>[À compléter selon les outils retenus, par exemple des statistiques de visite sans cookies.]</p>
+		<p>
+			Ce site ne dépose aucun cookie de suivi ni de publicité, et n’utilise aucun outil de mesure d’audience. Les polices de caractères sont chargées depuis les serveurs de Google, qui reçoivent à cette occasion votre adresse IP.
+		</p>
 	</PageSimple>
 </Layout>
