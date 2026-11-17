@@ -12,10 +12,10 @@ const groupe = [
 ];
 
 const filiales = [
-	{ href: '#filiale-yeeg', libelle: 'YÉEG' },
-	{ href: '#filiale-sc', libelle: 'Support Connecté' },
-	{ href: '#filiale-nekk', libelle: 'Nëkk' },
-	{ href: '#filiale-teranga', libelle: 'Teranga Immobilier' },
+	{ href: '#marque-yeeg', libelle: 'YÉEG' },
+	{ href: '#marque-sc', libelle: 'Support Connecté' },
+	{ href: '#marque-nekk', libelle: 'Nëkk' },
+	{ href: '#marque-teranga', libelle: 'Teranga Immobilier' },
 	{ href: '#projet-musee', libelle: 'Musée de la mémoire' },
 ];
 
@@ -40,7 +40,7 @@ const lien = 'text-[15px] text-texte-2 hover:text-creme';
 			>
 				<div class="flex max-w-[520px] flex-[1_1_320px] flex-col gap-2.5">
 					<h2 class="font-titre text-[clamp(26px,2.8vw,38px)] leading-[1.1] font-semibold tracking-[-0.02em] text-creme">Newsletter</h2>
-					<p class="text-[16px] leading-[1.6] text-texte-3">Les nouvelles du groupe, de nos filiales et de nos projets.</p>
+					<p class="text-[16px] leading-[1.6] text-texte-3">Les nouvelles du groupe, de nos marques et de nos projets.</p>
 				</div>
 				<div class="max-w-[520px] min-w-0 flex-[1_1_360px]">
 					<form
@@ -90,8 +90,8 @@ const lien = 'text-[15px] text-texte-2 hover:text-creme';
 					<p class={titreColonne}>Le groupe</p>
 					{groupe.map((item) => <a href={item.href} class={lien}>{item.libelle}</a>)}
 				</nav>
-				<nav aria-label="Nos filiales" class="flex flex-col gap-2">
-					<p class={titreColonne}>Nos filiales</p>
+				<nav aria-label="Nos marques" class="flex flex-col gap-2">
+					<p class={titreColonne}>Nos marques</p>
 					{filiales.map((filiale) => <a href={filiale.href} class={lien}>{filiale.libelle}</a>)}
 				</nav>
 				<nav aria-label="Informations" class="flex flex-col gap-2">

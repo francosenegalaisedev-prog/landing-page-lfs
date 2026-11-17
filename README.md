@@ -1,6 +1,6 @@
 # La Franco-Sénégalaise — site vitrine (Astro + Tailwind CSS)
 
-Ce code reproduit la maquette validée (« Landing page V3 · synthèse ») : ouverture au soleil levant, bandeau des filiales, le phygital (avec l'animation de fusion du physique et du digital), notre conviction, le groupe (engagements, valeurs, mot du président), nos filiales et notre écosystème, nos expertises en onglets et notre méthode, carrières, contact et newsletter.
+Ce code reproduit la maquette validée (« Landing page V3 · synthèse ») : ouverture au soleil levant, bandeau des marques, le phygital (avec l'animation de fusion du physique et du digital), notre conviction, le groupe (engagements, valeurs, mot du président), nos marques et notre écosystème, nos expertises en onglets et notre méthode, carrières, contact et newsletter.
 
 ## Pile
 
@@ -27,11 +27,11 @@ npm test          # tests unitaires des fonctions /api/contact et /api/newslette
 | --- | --- |
 | `src/config.ts` | Coordonnées, lien du site Support Connecté, informations légales, titre et description pour les moteurs de recherche, **interrupteur de la newsletter** (`fonctionnalites.newsletter`) |
 | `src/data/poles.ts` | Les quatre pôles d'expertises : titres, textes, services |
-| `src/data/marques.ts` | Filiales du bandeau défilant |
+| `src/data/marques.ts` | Marques du bandeau défilant |
 | `src/data/contact.ts` | Objets du formulaire de contact |
 | `src/components/Conviction.astro` | Section « Notre conviction » et chaîne des 4 points de contact |
 | `src/components/Groupe.astro` | Section « Le groupe » : engagements, valeurs, mot du président |
-| `src/components/Projets.astro` | Section « Nos filiales » (YÉEG, Support Connecté, Nëkk, Teranga Immobilier, Musée de la mémoire) |
+| `src/components/Projets.astro` | Section « Nos marques » (`#marques` : YÉEG, Support Connecté, Nëkk, Teranga Immobilier, Musée de la mémoire) |
 | `src/components/Poles.astro` | Section « Nos expertises » (4 onglets) et « Notre méthode » |
 | `src/components/Phygital.astro` | Section « Le phygital » et animation de rencontre Physique / Digital |
 | `src/components/Carrieres.astro` | Bandeau « Carrières » |
@@ -54,7 +54,7 @@ Pages (`src/pages/`) : `index.astro`, `mentions-legales.astro`, `confidentialite
 
 ## Interactions
 
-- **Nos expertises (pôles)** : motif ARIA « tabs » (clic, flèches gauche et droite, Début, Fin). Tout lien `data-voir-pole="…"` (pastilles des filiales et projets) ouvre l'onglet voulu et fait défiler jusqu'à `#expertises`.
+- **Nos expertises (pôles)** : motif ARIA « tabs » (clic, flèches gauche et droite, Début, Fin). Tout lien `data-voir-pole="…"` (pastilles des marques et projets) ouvre l'onglet voulu et fait défiler jusqu'à `#expertises`.
 - **Carrières** : le bouton « Candidature spontanée » fait défiler jusqu'au formulaire de contact et pré-sélectionne l'objet correspondant.
 - **Menu mobile** sous 861 px ; il se ferme au clic sur un lien et avec la touche Échap.
 - **Animations** : bandeau défilant et animation phygital coupés si le visiteur demande moins d'animations (`prefers-reduced-motion: reduce`).
