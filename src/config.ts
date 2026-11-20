@@ -16,7 +16,7 @@ export const site = {
 	legal: {
 		raisonSociale: 'La Franco Sénégalaise SAS',
 		capital: '1 000 000 F CFA',
-		adresse: 'Niakh Niakal',
+		adresse: 'Niakh Niakhal',
 		ninea: '013488045',
 		rccm: 'SN.MBR.2026.B.4000',
 		directeurPublication: 'William Seidman',
