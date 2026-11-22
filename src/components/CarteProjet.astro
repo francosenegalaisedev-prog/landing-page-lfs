@@ -43,7 +43,7 @@ const styles = {
 	class={`effet-carte flex min-w-0 flex-col items-start gap-3.5 rounded-[18px] p-7 ${largeur} ${styles.carte}`}
 >
 	<div class="flex h-14 items-center">
-		{logo && <Image src={logo.image} alt={logo.alt} class={`block h-auto w-auto max-w-full ${logo.classe}`} />}
+		{logo && <Image src={logo.image} alt={logo.alt} widths={[160, 320]} sizes="160px" class={`block h-auto w-auto max-w-full ${logo.classe}`} />}
 		{nomEnTexte && <p class="font-accent text-[30px] leading-none font-semibold text-miel italic">{nomEnTexte}</p>}
 	</div>
 
