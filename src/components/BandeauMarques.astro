@@ -1,6 +1,6 @@
 ---
 /**
- * Bandeau défilant des filiales de la maison mère.
+ * Bandeau défilant des marques de la maison mère.
  * La liste est répétée pour une boucle sans couture ; seul le premier passage est lu par
  * les lecteurs d'écran. Le défilement s'arrête si l'utilisateur demande moins d'animations.
  */
@@ -21,6 +21,7 @@ const passages = [0, 1, 2, 3];
 							alt={passage > 0 ? '' : marque.nom}
 							width={marque.largeur}
 							height={marque.hauteur}
+							densities={[1, 2]}
 							loading="eager"
 							class="block brightness-0"
 						/>
@@ -33,7 +34,7 @@ const passages = [0, 1, 2, 3];
 			{passages.map(() =>
 				marques.map((marque) => (
 					<li class="flex flex-none items-center gap-12 pr-12">
-						<Image src={marque.logo} alt="" width={marque.largeur} height={marque.hauteur} loading="eager" class="block brightness-0" />
+						<Image src={marque.logo} alt="" width={marque.largeur} height={marque.hauteur} densities={[1, 2]} loading="eager" class="block brightness-0" />
 						<span class="block h-0.5 w-4 rounded-[1px] bg-noir"></span>
 					</li>
 				)),

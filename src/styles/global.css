@@ -1,3 +1,12 @@
+/* Polices auto-hébergées (@fontsource-variable) */
+/* Inter variable : graisses 100–900, latin */
+@import '@fontsource-variable/inter/wght.css';
+/* Inter Tight variable : graisses 100–900, latin */
+@import '@fontsource-variable/inter-tight/wght.css';
+/* Cormorant Garamond : italic 500 et 600 uniquement */
+@import '@fontsource/cormorant-garamond/500-italic.css';
+@import '@fontsource/cormorant-garamond/600-italic.css';
+
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------

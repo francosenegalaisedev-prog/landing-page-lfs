@@ -37,12 +37,10 @@ const imagePartage = new URL('/og-image.jpg', base).href;
 		<meta property="og:image:height" content="630" />
 		<meta name="twitter:card" content="summary_large_image" />
 
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			rel="stylesheet"
-			href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap"
-		/>
+		<!-- Polices auto-hébergées : zéro requête tiers, zéro CLS réseau -->
+		<!-- Inter (variable) : 400–600 normal -->
+		<!-- Inter Tight (variable) : 500–700 normal -->
+		<!-- Cormorant Garamond : 500 et 600 italique uniquement (accent typographique) -->
 
 		{donneesStructurees && <script type="application/ld+json" set:html={JSON.stringify(donneesStructurees)} />}
 	</head>
