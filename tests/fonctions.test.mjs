@@ -63,7 +63,7 @@ function restaurerEnv() {
 
 const envBase = { BREVO_API_KEY: CLE, SENDER_EMAIL: 'expediteur@test.invalid' };
 const envNewsletter = { ...envBase, BREVO_LIST_ID: '12', BREVO_DOI_TEMPLATE_ID: '34' };
-const demande = { nom: NOM_VISITEUR, email: EMAIL_VISITEUR, message: MESSAGE_VISITEUR };
+const demande = { nom: NOM_VISITEUR, email: EMAIL_VISITEUR, message: MESSAGE_VISITEUR, sujet: 'Autre demande' };
 
 const fetchOriginal = globalThis.fetch;
 const consoleErrorOriginal = console.error;
@@ -146,9 +146,9 @@ describe('/api/contact', () => {
 		assert.equal(appels[0].corps.to[0].email, 'autre@exemple.test');
 	});
 
-	test('un saut de ligne dans le sujet ou le nom ne s’insère pas dans l’objet de l’e-mail', async () => {
+	test('un saut de ligne dans le nom ne s’insère pas dans l’objet de l’e-mail', async () => {
 		simuler();
-		await appeler(contact, '/api/contact', { ...demande, nom: 'Awa\r\nBcc: x@exemple.test', sujet: 'Objet\nBcc: y@exemple.test' }, envBase);
+		await appeler(contact, '/api/contact', { ...demande, nom: 'Awa\r\nBcc: x@exemple.test' }, envBase);
 		assert.doesNotMatch(appels[0].corps.subject, /[\r\n]/);
 	});
 
@@ -289,6 +289,32 @@ describe('/api/contact', () => {
 		const reponse = await contact(sansJson);
 		assert.equal(reponse.status, 303);
 		assert.equal(reponse.headers.get('location'), 'https://lafrancosenegalaise.com/?demande=envoyee#contact');
+	});
+
+	test('sujet absent ou non reconnu : 400 et aucun appel à Brevo', async () => {
+		simuler();
+		assert.equal((await appeler(contact, '/api/contact', { ...demande, sujet: '' }, envBase)).status, 400);
+		assert.equal((await appeler(contact, '/api/contact', { ...demande, sujet: 'Sujet inconnu' }, envBase)).status, 400);
+		assert.equal(appels.length, 0);
+	});
+
+	test('longueurs maximales dépassées : 400 et aucun appel à Brevo', async () => {
+		simuler();
+		assert.equal((await appeler(contact, '/api/contact', { ...demande, nom: 'x'.repeat(101) }, envBase)).status, 400);
+		assert.equal((await appeler(contact, '/api/contact', { ...demande, email: 'a'.repeat(244) + '@exemple.test' }, envBase)).status, 400);
+		assert.equal((await appeler(contact, '/api/contact', { ...demande, societe: 'x'.repeat(151) }, envBase)).status, 400);
+		assert.equal((await appeler(contact, '/api/contact', { ...demande, telephone: 'x'.repeat(41) }, envBase)).status, 400);
+		assert.equal((await appeler(contact, '/api/contact', { ...demande, message: 'x'.repeat(5001) }, envBase)).status, 400);
+		assert.equal(appels.length, 0);
+	});
+
+	test('message avec plus de 2 URL : 400 ; exactement 2 URL : accepté', async () => {
+		simuler();
+		const avecTroisUrls = 'Voici https://un.test et https://deux.test et https://trois.test.';
+		assert.equal((await appeler(contact, '/api/contact', { ...demande, message: avecTroisUrls }, envBase)).status, 400);
+		const avecDeuxUrls = 'Voir https://un.test et https://deux.test merci.';
+		assert.equal((await appeler(contact, '/api/contact', { ...demande, message: avecDeuxUrls }, envBase)).status, 200);
+		assert.equal(appels.length, 1);
 	});
 });
 
