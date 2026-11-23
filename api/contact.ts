@@ -15,7 +15,6 @@
  * Les échecs sont écrits dans les journaux Vercel (statut et message de Brevo, jamais la clé
  * ni les données du visiteur).
  */
-import { sujets } from '../src/data/contact.js';
 import {
 	EMAIL_VALIDE,
 	appelerBrevo,
@@ -26,13 +25,6 @@ import {
 	nettoyerPourJournal,
 	surUneLigne,
 } from '../lib/brevo.js';
-
-/** Nombre maximal d'URL (http:// ou https://) autorisées dans le message. */
-const MAX_URL_MESSAGE = 2;
-/** Compteur d'URL dans une chaîne. */
-function compterUrls(texte: string): number {
-	return (texte.match(/https?:\/\//gi) ?? []).length;
-}
 
 declare const process: { env: Record<string, string | undefined> };
 
@@ -93,24 +85,12 @@ export async function POST(request: Request): Promise<Response> {
 		const societe = donnees.societe ?? '';
 		const telephone = donnees.telephone ?? '';
 		const sujet = donnees.sujet ?? '';
-
-		// Longueurs maximales par champ
 		if (
-			!nom || nom.length > 100 ||
-			!EMAIL_VALIDE.test(email) || email.length > 254 ||
+			!nom || nom.length > 200 ||
+			!EMAIL_VALIDE.test(email) || email.length > 200 ||
 			!message || message.length > 5000 ||
-			societe.length > 150 || telephone.length > 40 || sujet.length > 200
+			societe.length > 200 || telephone.length > 50 || sujet.length > 200
 		) {
-			return repondre(request, false, 400);
-		}
-
-		// Sujet obligatoire et doit correspondre à une valeur connue du formulaire
-		if (!sujets.includes(sujet as (typeof sujets)[number])) {
-			return repondre(request, false, 400);
-		}
-
-		// Limite les messages contenant plus de 2 adresses web (spam de liens)
-		if (compterUrls(message) > MAX_URL_MESSAGE) {
 			return repondre(request, false, 400);
 		}
 
